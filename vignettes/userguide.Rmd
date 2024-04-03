@@ -3,7 +3,7 @@ title: Interacting with the SewerRat REST API
 author:
 - name: Aaron Lun
   email: infinite.monkeys.with.keyboards@gmail.com
-package: gypsum
+package: SewerRat
 date: "Revised: April 2, 2024"
 output:
   BiocStyle::html_document
@@ -19,6 +19,11 @@ self <- Githubpkg("ArtifactDB/SewerRat")
 knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE)
 ```
 
+```{r, echo=FALSE}
+library(SewerRat)
+startSewerRat()
+```
+
 # Introduction
 
 The `r self` package implements an R client for the [API of the same name](https://github.com/ArtifactDB/SewerRat).
@@ -28,9 +33,86 @@ this is typically the case for high-performance computing (HPC) clusters in scie
 
 # Registering directories
 
+Let's mock up a directory of metadata files:
+
+```{r}
+mydir <- tempfile()
+dir.create(mydir)
+write(file=file.path(mydir, "metadata.json"), '{ "name": "foo", "description": "bar" }')
+dir.create(file.path(mydir, "stuff"))
+write(file=file.path(mydir, "stuff", "metadata.json"), '{ "food": "barramundi" }')
+```
+
+We can then easily register it:
+
+```{r}
+library(SewerRat)
+register(mydir, names="metadata.json") # Only indexing metadata files named 'metadata.json'.
+```
+
+Similarly, we can deregister this directory with `deregister(mydir)`.
+
 # Searching the index
 
-# Saving Bioconduct objects
+Use the `query()` function to perform free-text searches:
+
+```{r}
+lapply(query("foo"), function(x) x$path)
+lapply(query("bar%"), function(x) x$path) # partial match to 'bar...'
+lapply(query("bar% AND foo"), function(x) x$path) # boolean operations
+lapply(query("food:bar%"), function(x) x$path) # match in the 'food' field
+```
+
+We can also search on the user, path components, and time of creation:
+
+```{r}
+lapply(query(user=Sys.info()["user"]), function(x) x$path) # created by myself
+lapply(query(path="stuff"), function(x) x$path) # path has 'stuff' in it
+lapply(query(from=Sys.time() - 3600), function(x) x$path) # created less than 1 hour ago
+```
+
+# Saving Bioconductor objects for registration
+
+We provide some convenience methods to quickly save Bioconductor objects and associated metadata for quick registration.
+For example, if we have the following objects:
+
+```{r}
+library(S4Vectors)
+df1 <- DataFrame(X = 1:10)
+df2 <- DataFrame(Y = letters)
+df3 <- DataFrame(Z = runif(5))
+```
+
+We use the `quickSave()` function to deposit them into a directory.
+(This uses the `r Biocpkg("alabaster.base")` package under the hood to create the on-disk representations.)
+
+```{r}
+biocdir <- tempfile()
+dir.create(biocdir)
+quickSave(df1, list(description="This has integers"), file.path(biocdir, "int"))
+quickSave(df2, list(description="This has characters"), file.path(biocdir, "char"))
+quickSave(df3, list(description="This has reals"), file.path(biocdir, "real"))
+```
+
+Then we can just register this directory with our SewerRat API.
+All of the metadata is saved via the `_metadata.json` name:
+
+```{r}
+register(biocdir, names="_metadata.json")
+```
+
+We can now query for these objects:
+
+```{r}
+res <- query("integers")
+lapply(res, function(x) x$path)
+```
+
+And once we find something we like, we can load it back in quickly:
+
+```{r}
+quickRead(res[[1]]$path)
+```
 
 # Session information {-}
 

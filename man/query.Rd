@@ -65,10 +65,31 @@ e.g., \code{neur\%} will match files with \code{neuron}, \code{neural}, \code{ne
 }
 
 \examples{
-if (interactive()) {
-    query(text="single-cell AND cancer")
-}
+# Starting up an example SewerRat service:
+startSewerRat()
 
+# Mocking up a directory of stuff to query.
+mydir <- tempfile()
+dir.create(mydir)
+write(file=file.path(mydir, "metadata.json"), '{ "first": "Aaron", "last": "Lun" }')
+dir.create(file.path(mydir, "diet"))
+write(file=file.path(mydir, "diet", "metadata.json"), 
+   '{ "meal": "lunch", "ingredients": "water" }')
+
+# Registering it:
+register(mydir, "metadata.json")
+
+query("aaron")
+query("lun\%") 
+query("lun\% AND aaron")
+query("meal:bar\%")
+
+query(path="diet/") # has 'diet/' in the path
+query(user=Sys.info()["user"]) # created by the current user
+query(from=Sys.time() - 60) # no more than 1 minute old
+
+# Okay, stop the service:
+stopSewerRat()
 }
 \author{
 Aaron Lun

@@ -3,16 +3,19 @@ Version: 0.1.0
 Date: 2024-04-01
 Title: Client for the SewerRat API
 Description: 
-    Search metadata files in directories of a shared filesystem, usually for a HPC.
-    Register your own directories for inclusion into the search index.
+    Search metadata files across a shared filesystem via the SewerRat API.
+    Register custom directories for inclusion into the search index.
     Save Bioconductor objects into standard formats for sharing and collaboration.
-Authors@R: person("Aaron", "Lun", role=c("aut", "cre"), email="luna@gene.com")
+Authors@R: person("Aaron", "Lun", role=c("aut", "cre"), email="infinite.monkeys.with.keyboards@gmail.com")
 Imports:
+    methods,
     httr2
 Suggests:
     S4Vectors,
     jsonlite,
-    alabaster.base
+    alabaster.base,
+    knitr
 License: MIT + file LICENSE
 Encoding: UTF-8
 RoxygenNote: 7.3.1
+VignetteBuilder: knitr

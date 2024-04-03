@@ -49,10 +49,31 @@
 #' 
 #' @author Aaron Lun
 #' @examples
-#' if (interactive()) {
-#'     query(text="single-cell AND cancer")
-#' }
+#' # Starting up an example SewerRat service:
+#' startSewerRat()
 #'
+#' # Mocking up a directory of stuff to query.
+#' mydir <- tempfile()
+#' dir.create(mydir)
+#' write(file=file.path(mydir, "metadata.json"), '{ "first": "Aaron", "last": "Lun" }')
+#' dir.create(file.path(mydir, "diet"))
+#' write(file=file.path(mydir, "diet", "metadata.json"), 
+#'    '{ "meal": "lunch", "ingredients": "water" }')
+#'
+#' # Registering it:
+#' register(mydir, "metadata.json")
+#'
+#' query("aaron")
+#' query("lun%") 
+#' query("lun% AND aaron")
+#' query("meal:bar%")
+#'
+#' query(path="diet/") # has 'diet/' in the path
+#' query(user=Sys.info()["user"]) # created by the current user
+#' query(from=Sys.time() - 60) # no more than 1 minute old
+#'
+#' # Okay, stop the service:
+#' stopSewerRat()
 #' @export
 #' @import httr2
 query <- function(text, user, path, from, until, number=100, url=restUrl()) {
@@ -71,17 +92,17 @@ query <- function(text, user, path, from, until, number=100, url=restUrl()) {
     }
 
     if (!missing(from)) {
-        conditions <- c(conditions, list(list(type="time", time=as.double(from), after=TRUE)))
+        conditions <- c(conditions, list(list(type="time", time=round(as.double(from)), after=TRUE)))
     }
 
     if (!missing(until)) {
-        conditions <- c(conditions, list(list(type="time", time=as.double(until))))
+        conditions <- c(conditions, list(list(type="time", time=round(as.double(until)))))
     }
 
     if (length(conditions) > 1) {
         query <- list(type="and", children=conditions)
     } else if (length(conditions) == 1) {
-        query <- conditions[1]
+        query <- conditions[[1]]
     } else {
         stop("at least one search filter must be present")
     }

@@ -22,9 +22,20 @@ Register a directory on a shared filesystem for inclusion into the search index.
 This assumes that the directory is world-readable and you have write access to it.
 }
 \examples{
-if (interactive()) {
-     register(paste0("/gstore/user/scratch/", Sys.user()), "metadata.json")
-}
+# Start up an example SewerRat service:
+startSewerRat()
+
+# Mocking up a directory:
+tmp <- tempfile()
+dir.create(tmp)
+write(file=file.path(tmp, "metadata.json"), '{ "name": "Aaron" }')
+
+# Once we register it, we can query its contents.
+register(tmp, "metadata.json")
+query("Aaron")
+
+# Okay, stop the service:
+stopSewerRat()
 }
 \author{
 Aaron Lun

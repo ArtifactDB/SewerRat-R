@@ -13,9 +13,20 @@
 #' @author Aaron Lun
 #'
 #' @examples
-#' if (interactive()) {
-#'      register(paste0("/gstore/user/scratch/", Sys.user()), "metadata.json")
-#' }
+#' # Start up an example SewerRat service:
+#' startSewerRat()
+#'
+#' # Mocking up a directory:
+#' tmp <- tempfile()
+#' dir.create(tmp)
+#' write(file=file.path(tmp, "metadata.json"), '{ "name": "Aaron" }')
+#'
+#' # Once we register it, we can query its contents.
+#' register(tmp, "metadata.json")
+#' query("Aaron")
+#'
+#' # Okay, stop the service:
+#' stopSewerRat()
 #' @export
 #' @import httr2
 register <- function(dir, names, url=restUrl()) {

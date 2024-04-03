@@ -19,13 +19,30 @@ Note that this should be world-readable if it is to be registered in \code{\link
 Quickly save and read Bioconductor objects from their on-disk representations (based on the \pkg{alabaster.base} package).
 }
 \examples{
+# Staring up a test service:
+startSewerRat()
+
+# Mocking up a Bioconductor object:
 library(S4Vectors)
 df <- DataFrame(A=1:10, B=LETTERS[1:10])
 meta <- list(title="A data frame", description="This is a data frame")
-tmp <- tempfile()
-quicksave(df, meta, tmp)
-quickread(tmp)
 
+# Saving it inside a directory to be registered:
+dir <- tempfile()
+dir.create(dir)
+quicksave(df, meta, file.path(dir, "my_df"))
+
+# Then we just register that directory:
+register(dir, "_metadata.json")
+
+# And now we can find interesting things:
+res <- query("data frame")
+
+# ... and load them back in:
+quickread(res[[1]]$path)
+
+# Shutting down our test service:
+stopSewerRat()
 }
 \author{
 Aaron Lun

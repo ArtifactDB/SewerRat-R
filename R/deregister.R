@@ -13,9 +13,21 @@
 #' @author Aaron Lun
 #'
 #' @examples
-#' if (interactive()) {
-#'      register(paste0("/gstore/user/scratch/", Sys.user()), "metadata.json")
-#' }
+#' # Start up an example SewerRat service:
+#' startSewerRat()
+#'
+#' tmp <- tempfile()
+#' dir.create(tmp)
+#' write(file=file.path(tmp, "whee.json"), '{ "foo": "bar" }')
+#' register(tmp, "whee.json")
+#' query("bar")
+#'
+#' # After deregistration, the files cannot be queried.
+#' deregister(tmp)
+#' query("bar")
+#'
+#' # Okay, stop the service:
+#' stopSewerRat()
 #' @export
 #' @import httr2
 deregister <- function(dir, url=restUrl()) {
