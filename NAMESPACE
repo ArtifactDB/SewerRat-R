@@ -2,8 +2,8 @@
 
 export(deregister)
 export(query)
-export(quickread)
-export(quicksave)
+export(quickRead)
+export(quickSave)
 export(register)
 export(restUrl)
 export(startSewerRat)
