@@ -1,0 +1,18 @@
+Package: SewerRat
+Version: 0.1.0
+Date: 2024-04-01
+Title: Client for the SewerRat API
+Description: 
+    Search metadata files in directories of a shared filesystem, usually for a HPC.
+    Register your own directories for inclusion into the search index.
+    Save Bioconductor objects into standard formats for sharing and collaboration.
+Authors@R: person("Aaron", "Lun", role=c("aut", "cre"), email="luna@gene.com")
+Imports:
+    httr2
+Suggests:
+    S4Vectors,
+    jsonlite,
+    alabaster.base
+License: MIT + file LICENSE
+Encoding: UTF-8
+RoxygenNote: 7.3.1

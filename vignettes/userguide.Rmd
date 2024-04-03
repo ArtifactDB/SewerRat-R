@@ -1,0 +1,39 @@
+---
+title: Interacting with the SewerRat REST API
+author:
+- name: Aaron Lun
+  email: infinite.monkeys.with.keyboards@gmail.com
+package: gypsum
+date: "Revised: April 2, 2024"
+output:
+  BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{Hitting the gypsum API}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo=FALSE}
+library(BiocStyle)
+self <- Githubpkg("ArtifactDB/SewerRat")
+knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE)
+```
+
+# Introduction
+
+The `r self` package implements an R client for the [API of the same name](https://github.com/ArtifactDB/SewerRat).
+This allows users to easily query the SewerRat search index, register or deregister their own directories in the index, and quickly save and load Bioconductor objects for registration.
+It is assumed that the users of the `r self` client and the SewerRat API itself are accessing the same shared filesystem;
+this is typically the case for high-performance computing (HPC) clusters in scientific institutions.
+
+# Registering directories
+
+# Searching the index
+
+# Saving Bioconduct objects
+
+# Session information {-}
+
+```{r}
+sessionInfo()
+```
