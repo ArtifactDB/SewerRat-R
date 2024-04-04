@@ -4,12 +4,14 @@
 \alias{register}
 \title{Register a directory for indexing}
 \usage{
-register(dir, names, url = restUrl(), wait = 1)
+register(dir, names = "_metadata.json", url = restUrl(), wait = 1)
 }
 \arguments{
 \item{dir}{String containing the path to the directory to be registered.}
 
-\item{names}{Character vector containing the base names of the metadata files, e.g., \code{metadata.json}.}
+\item{names}{Character vector containing the base names of the metadata files.
+Defaults to \code{_metadata.json} for convenient use with \code{\link{quickSave}},
+but any number of base names can be supplied here.}
 
 \item{url}{String containing the URL to the SewerRat REST API.}
 

@@ -30,7 +30,7 @@
 #' quickSave(df, meta, file.path(dir, "my_df"))
 #'
 #' # Then we just register that directory:
-#' register(dir, "_metadata.json")
+#' register(dir)
 #'
 #' # And now we can find interesting things:
 #' res <- query("data frame")

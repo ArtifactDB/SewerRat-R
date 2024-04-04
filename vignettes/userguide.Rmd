@@ -95,10 +95,9 @@ quickSave(df3, list(description="This has reals"), file.path(biocdir, "real"))
 ```
 
 Then we can just register this directory with our SewerRat API.
-All of the metadata is saved via the `_metadata.json` name:
 
 ```{r}
-register(biocdir, names="_metadata.json")
+register(biocdir)
 ```
 
 We can now query for these objects:

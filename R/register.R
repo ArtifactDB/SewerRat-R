@@ -4,7 +4,9 @@
 #' This assumes that the directory is world-readable and you have write access to it.
 #'
 #' @param dir String containing the path to the directory to be registered.
-#' @param names Character vector containing the base names of the metadata files, e.g., \code{metadata.json}.
+#' @param names Character vector containing the base names of the metadata files.
+#' Defaults to \code{_metadata.json} for convenient use with \code{\link{quickSave}},
+#' but any number of base names can be supplied here.
 #' @param url String containing the URL to the SewerRat REST API.
 #' @param wait Numeric scalar specifying the number of seconds to wait for the filesystem to synchronize.
 #'
@@ -30,7 +32,7 @@
 #' stopSewerRat()
 #' @export
 #' @import httr2
-register <- function(dir, names, url=restUrl(), wait=1) {
+register <- function(dir, names = "_metadata.json", url=restUrl(), wait=1) {
     dir <- normalizePath(dir, mustWork=TRUE)
     stopifnot(length(names) > 0)
 
