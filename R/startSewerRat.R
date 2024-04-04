@@ -120,6 +120,7 @@ running <- new.env()
 stopSewerRat <- function() {
     if (!is.null(running$active)) {
         kill_SewerRat(running$active)
+        running$active$pid <- NULL # need to NULL this explicitly so that the reg.finalizer doesn't run.
         running$active <- NULL
         running$port <- NULL
         if (!is.null(running$url)) {
