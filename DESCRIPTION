@@ -1,6 +1,6 @@
 Package: SewerRat
-Version: 0.1.0
-Date: 2024-04-01
+Version: 0.1.1
+Date: 2024-04-04
 Title: Client for the SewerRat API
 Description: 
     Search metadata files across a shared filesystem via the SewerRat API.
@@ -14,7 +14,8 @@ Suggests:
     S4Vectors,
     jsonlite,
     alabaster.base,
-    knitr
+    knitr,
+    BiocStyle
 License: MIT + file LICENSE
 Encoding: UTF-8
 RoxygenNote: 7.3.1
