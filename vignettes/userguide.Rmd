@@ -113,6 +113,13 @@ And once we find something we like, we can load it back in quickly:
 quickRead(res[[1]]$path)
 ```
 
+# Administrator instructions
+
+The URL to the SewerRat REST API depends on the instance and needs to be specified correctly before `r self` functions can be used.
+Administrators of an R installation can achieve this by setting the `SEWERRAT_REST_URL` environment variable before `r self` package load.
+Developers of packages that call `r self` can either pass in a URL to the `url=` argument in various `r self` functions,
+or they can globally set the URL via the `restUrl()` function.
+
 # Session information {-}
 
 ```{r}
