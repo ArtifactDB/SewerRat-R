@@ -6,6 +6,7 @@
 #' @param dir String containing the path to the directory to be registered.
 #' @param names Character vector containing the base names of the metadata files, e.g., \code{metadata.json}.
 #' @param url String containing the URL to the SewerRat REST API.
+#' @param wait Numeric scalar specifying the number of seconds to wait for the filesystem to synchronize.
 #'
 #' @return On success, the directory is registered and NULL is invisibly returned.
 #' A warning is raised if any particular metadata file cannot be indexed.
@@ -29,7 +30,7 @@
 #' stopSewerRat()
 #' @export
 #' @import httr2
-register <- function(dir, names, url=restUrl()) {
+register <- function(dir, names, url=restUrl(), wait=1) {
     dir <- normalizePath(dir, mustWork=TRUE)
     stopifnot(length(names) > 0)
 
@@ -43,7 +44,8 @@ register <- function(dir, names, url=restUrl()) {
     target <- file.path(dir, payload$code)
     write(file=target, character(0))
     on.exit(unlink(target))
-    Sys.sleep(1) # some leeway to allow slow network shares to sync.
+
+    Sys.sleep(wait) # some leeway to allow slow network shares to sync.
 
     req <- request(paste0(url, "/register/finish"))
     req <- req_method(req, "POST")

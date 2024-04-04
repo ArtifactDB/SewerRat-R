@@ -4,11 +4,10 @@
 #' This assumes that either the directory does not exist,
 #' or that the directory is world-readable and you have write access to it.
 #'
-#' @param dir String containing the path to the directory to be registered.
-#' @param url String containing the URL to the SewerRat REST API.
+#' @param dir String containing the path to the directory to be deregistered.
+#' @inheritParams register
 #'
-#' @return On success, the directory is registered and NULL is invisibly returned.
-#' A warning is raised if any particular metadata file cannot be indexed.
+#' @return On success, the directory is deregistered and NULL is invisibly returned.
 #'
 #' @author Aaron Lun
 #'
@@ -30,7 +29,7 @@
 #' stopSewerRat()
 #' @export
 #' @import httr2
-deregister <- function(dir, url=restUrl()) {
+deregister <- function(dir, url=restUrl(), wait=1) {
     dir <- normalizePath(dir, mustWork=TRUE)
 
     req <- request(paste0(url, "/deregister/start"))
@@ -44,7 +43,8 @@ deregister <- function(dir, url=restUrl()) {
         target <- file.path(dir, payload$code)
         write(file=target, character(0))
         on.exit(unlink(target))
-        Sys.sleep(1) # some leeway to allow slow network shares to sync.
+
+        Sys.sleep(wait) # some leeway to allow slow network shares to sync.
 
         req <- request(paste0(url, "/deregister/finish"))
         req <- req_method(req, "POST")

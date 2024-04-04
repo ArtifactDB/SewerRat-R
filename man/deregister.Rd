@@ -4,16 +4,17 @@
 \alias{deregister}
 \title{Deregister a directory from the index}
 \usage{
-deregister(dir, url = restUrl())
+deregister(dir, url = restUrl(), wait = 1)
 }
 \arguments{
-\item{dir}{String containing the path to the directory to be registered.}
+\item{dir}{String containing the path to the directory to be deregistered.}
 
 \item{url}{String containing the URL to the SewerRat REST API.}
+
+\item{wait}{Numeric scalar specifying the number of seconds to wait for the filesystem to synchronize.}
 }
 \value{
-On success, the directory is registered and NULL is invisibly returned.
-A warning is raised if any particular metadata file cannot be indexed.
+On success, the directory is deregistered and NULL is invisibly returned.
 }
 \description{
 Remove a directory on the shared filesystem from the search index.

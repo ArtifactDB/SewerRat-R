@@ -4,7 +4,7 @@
 \alias{register}
 \title{Register a directory for indexing}
 \usage{
-register(dir, names, url = restUrl())
+register(dir, names, url = restUrl(), wait = 1)
 }
 \arguments{
 \item{dir}{String containing the path to the directory to be registered.}
@@ -12,6 +12,8 @@ register(dir, names, url = restUrl())
 \item{names}{Character vector containing the base names of the metadata files, e.g., \code{metadata.json}.}
 
 \item{url}{String containing the URL to the SewerRat REST API.}
+
+\item{wait}{Numeric scalar specifying the number of seconds to wait for the filesystem to synchronize.}
 }
 \value{
 On success, the directory is registered and NULL is invisibly returned.
