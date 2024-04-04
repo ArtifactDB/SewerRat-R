@@ -15,8 +15,11 @@ quickRead(path)
 \item{metadata}{A list of metadata describing the object.
 Any JSON-compatible data can be stored, in any structure; though it is conventional to have a \code{title} and \code{description} field.}
 
-\item{path}{String containing the path to the directory in which to save \code{x}.
-Note that this should be world-readable if it is to be registered in \code{\link{register}}.}
+\item{path}{For \code{quickSave}, a string containing the path to the directory in which to save \code{x}.
+Note that this should be world-readable if it is to be registered in \code{\link{register}}.
+
+For \code{quickRead}, this can be the same string containing the path to the directory,
+or it can be a string containing a path to the metadata file produced by \code{quickSave}.}
 }
 \value{
 \code{quickSave} will save \code{x} to \code{path}.
