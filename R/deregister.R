@@ -44,6 +44,7 @@ deregister <- function(dir, url=restUrl()) {
         target <- file.path(dir, payload$code)
         write(file=target, character(0))
         on.exit(unlink(target))
+        Sys.sleep(1) # some leeway to allow slow network shares to sync.
 
         req <- request(paste0(url, "/deregister/finish"))
         req <- req_method(req, "POST")

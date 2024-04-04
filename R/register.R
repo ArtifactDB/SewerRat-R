@@ -43,6 +43,7 @@ register <- function(dir, names, url=restUrl()) {
     target <- file.path(dir, payload$code)
     write(file=target, character(0))
     on.exit(unlink(target))
+    Sys.sleep(1) # some leeway to allow slow network shares to sync.
 
     req <- request(paste0(url, "/register/finish"))
     req <- req_method(req, "POST")
