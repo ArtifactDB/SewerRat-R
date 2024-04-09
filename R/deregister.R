@@ -13,23 +13,20 @@
 #'
 #' @examples
 #' # Start up an example SewerRat service:
-#' startSewerRat()
+#' info <- startSewerRat()
 #'
 #' tmp <- tempfile()
 #' dir.create(tmp)
 #' write(file=file.path(tmp, "whee.json"), '{ "foo": "bar" }')
-#' register(tmp, "whee.json")
-#' query("bar")
+#' register(tmp, "whee.json", url=info$url)
+#' query("bar", url=info$url)
 #'
 #' # After deregistration, the files cannot be queried.
-#' deregister(tmp)
-#' query("bar")
-#'
-#' # Okay, stop the service:
-#' stopSewerRat()
+#' deregister(tmp, url=info$url)
+#' query("bar", url=info$url)
 #' @export
 #' @import httr2
-deregister <- function(dir, url=restUrl(), wait=1) {
+deregister <- function(dir, url, wait=1) {
     dir <- normalizePath(dir, mustWork=TRUE)
 
     req <- request(paste0(url, "/deregister/start"))

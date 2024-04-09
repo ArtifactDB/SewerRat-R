@@ -4,7 +4,7 @@
 \alias{query}
 \title{Query metadata}
 \usage{
-query(text, user, path, from, until, number = 100, url = restUrl())
+query(text, user, path, from, until, url, number = 100)
 }
 \arguments{
 \item{text}{String containing a free-text query, see below for details.
@@ -22,9 +22,9 @@ If missing, no filtering is applied to remove old files.}
 \item{until}{A \link{POSIXt} object to filter out newer files, i.e., only files older than \code{until} will be retained.
 If missing, no filtering is applied to remove new files.}
 
-\item{number}{Integer specifying the maximum number of results to return.}
-
 \item{url}{String containing the URL to the SewerRat REST API.}
+
+\item{number}{Integer specifying the maximum number of results to return.}
 }
 \value{
 List of lists where each inner list corresponds to a metadata file and contains:
@@ -66,7 +66,7 @@ e.g., \code{neur\%} will match files with \code{neuron}, \code{neural}, \code{ne
 
 \examples{
 # Starting up an example SewerRat service:
-startSewerRat()
+info <- startSewerRat()
 
 # Mocking up a directory of stuff to query.
 mydir <- tempfile()
@@ -77,19 +77,16 @@ write(file=file.path(mydir, "diet", "metadata.json"),
    '{ "meal": "lunch", "ingredients": "water" }')
 
 # Registering it:
-register(mydir, "metadata.json")
+register(mydir, "metadata.json", url=info$url)
 
-query("aaron")
-query("lun\%") 
-query("lun\% AND aaron")
-query("meal:bar\%")
+query("aaron", url=info$url)
+query("lun\%", url=info$url) 
+query("lun\% AND aaron", url=info$url)
+query("meal:bar\%", url=info$url)
 
-query(path="diet/") # has 'diet/' in the path
-query(user=Sys.info()["user"]) # created by the current user
-query(from=Sys.time() - 60) # no more than 1 minute old
-
-# Okay, stop the service:
-stopSewerRat()
+query(path="diet/", url=info$url) # has 'diet/' in the path
+query(user=Sys.info()["user"], url=info$url) # created by the current user
+query(from=Sys.time() - 60, url=info$url) # no more than 1 minute old
 }
 \author{
 Aaron Lun

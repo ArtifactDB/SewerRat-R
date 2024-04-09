@@ -19,17 +19,19 @@ self <- Githubpkg("ArtifactDB/SewerRat")
 knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE)
 ```
 
-```{r, echo=FALSE}
-library(SewerRat)
-startSewerRat()
-```
-
 # Introduction
 
 The `r self` package implements an R client for the [API of the same name](https://github.com/ArtifactDB/SewerRat).
 This allows users to easily query the SewerRat search index, register or deregister their own directories in the index, and quickly save and load Bioconductor objects for registration.
 It is assumed that the users of the `r self` client and the SewerRat API itself are accessing the same shared filesystem;
 this is typically the case for high-performance computing (HPC) clusters in scientific institutions.
+For demonstration purposes, we'll set up a test instance of the API on our local machine:
+
+```{r}
+library(SewerRat)
+info <- startSewerRat()
+info$url
+```
 
 # Registering directories
 
@@ -43,74 +45,40 @@ dir.create(file.path(mydir, "stuff"))
 write(file=file.path(mydir, "stuff", "metadata.json"), '{ "food": "barramundi" }')
 ```
 
-We can then easily register it:
+We can then easily register it with the `register()` function.
+The example below will only index metadata files inside `mydir` named 'metadata.json', though any number of base names can be supplied here.
 
 ```{r}
 library(SewerRat)
-register(mydir, names="metadata.json") # Only indexing metadata files named 'metadata.json'.
+register(mydir, names="metadata.json", url=info$url) 
 ```
 
-Similarly, we can deregister this directory with `deregister(mydir)`.
+Similarly, we can deregister this directory with `deregister()`.
+All registration actions assume that the caller has write access to the to-be-(de)registered directory.
 
 # Searching the index
 
-Use the `query()` function to perform free-text searches:
+We use the `query()` function to perform free-text searches on the indexed metadata.
 
 ```{r}
-lapply(query("foo"), function(x) x$path)
-lapply(query("bar%"), function(x) x$path) # partial match to 'bar...'
-lapply(query("bar% AND foo"), function(x) x$path) # boolean operations
-lapply(query("food:bar%"), function(x) x$path) # match in the 'food' field
+lapply(query("foo", url=info$url), function(x) x$path)
+lapply(query("bar%", url=info$url), function(x) x$path) # partial match to 'bar...'
+lapply(query("bar% AND foo", url=info$url), function(x) x$path) # boolean operations
+lapply(query("food:bar%", url=info$url), function(x) x$path) # match in the 'food' field
 ```
 
 We can also search on the user, path components, and time of creation:
 
 ```{r}
-lapply(query(user=Sys.info()["user"]), function(x) x$path) # created by myself
-lapply(query(path="stuff"), function(x) x$path) # path has 'stuff' in it
-lapply(query(from=Sys.time() - 3600), function(x) x$path) # created less than 1 hour ago
+lapply(query(user=Sys.info()["user"], url=info$url), function(x) x$path) # created by myself
+lapply(query(path="stuff", url=info$url), function(x) x$path) # path has 'stuff' in it
+lapply(query(from=Sys.time() - 3600, url=info$url), function(x) x$path) # created less than 1 hour ago
 ```
 
-# Saving Bioconductor objects for registration
-
-We provide some convenience methods to quickly save Bioconductor objects and associated metadata for quick registration.
-For example, if we have the following objects:
+Or indeed, any combination of these fields, which are treated as a boolean AND in the query:
 
 ```{r}
-library(S4Vectors)
-df1 <- DataFrame(X = 1:10)
-df2 <- DataFrame(Y = letters)
-df3 <- DataFrame(Z = runif(5))
-```
-
-We use the `quickSave()` function to deposit them into a directory.
-(This uses the `r Biocpkg("alabaster.base")` package under the hood to create the on-disk representations.)
-
-```{r}
-biocdir <- tempfile()
-dir.create(biocdir)
-quickSave(df1, list(description="This has integers"), file.path(biocdir, "int"))
-quickSave(df2, list(description="This has characters"), file.path(biocdir, "char"))
-quickSave(df3, list(description="This has reals"), file.path(biocdir, "real"))
-```
-
-Then we can just register this directory with our SewerRat API.
-
-```{r}
-register(biocdir)
-```
-
-We can now query for these objects:
-
-```{r}
-res <- query("integers")
-lapply(res, function(x) x$path)
-```
-
-And once we find something we like, we can load it back in quickly:
-
-```{r}
-quickRead(res[[1]]$path)
+query("barramundi", path="stuff", url=info$url)
 ```
 
 # Administrator instructions

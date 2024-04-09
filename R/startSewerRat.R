@@ -6,27 +6,26 @@
 #' @param db String containing a path to the SQLite database.
 #' @param port Integer specifying the port to use for hosting the service.
 #' If \code{NULL}, a free port is randomly selected.
-#' @param setUrl Logical scalar indicating whether \code{\link{restUrl}} should be updated to use the new service.
 #'
-#' @return For \code{startSewerRat}, a list indicating whether a new service was set up, along with the port number.
-#' If \code{setUrl=TRUE}, the REST URL is updated to this new service.
+#' @return For \code{startSewerRat}, a list indicating whether a new service was set up, along with the port number and URL to use in other \pkg{SewerRat} functions.
 #'
 #' For \code{stopSewerRat}, any existing service is shut down, and \code{NULL} is invisibly returned.
-#' The REST URL is also reset to its previous value if it was changed by \code{startSewerRat}.
 #'
 #' @seealso
 #' \url{https://github.com/ArtifactDB/SewerRat}, for source code and binaries to build and run a SewerRat service.
 #' 
 #' @examples
 #' startSewerRat()
-#' restUrl()
+#' startSewerRat() # repeated calls just re-use the same instance.
+#'
 #' stopSewerRat()
+#' startSewerRat() # initialize a new instance.
 #' 
 #' @export
 #' @importFrom utils download.file
-startSewerRat <- function(db=tempfile(fileext=".sqlite3"), port=NULL, setUrl=TRUE) {
+startSewerRat <- function(db=tempfile(fileext=".sqlite3"), port=NULL) {
     if (!is.null(running$active)) {
-        return(list(new=FALSE, port=running$port))
+        return(list(new=FALSE, port=running$port, url=assemble_url(running$port)))
     }
 
     # This should really be the cache directory, but our HPC deployment does
@@ -84,11 +83,7 @@ startSewerRat <- function(db=tempfile(fileext=".sqlite3"), port=NULL, setUrl=TRU
 
     running$active <- process
     running$port <- port
-    if (setUrl) {
-        running$url <- restUrl(paste0("http://0.0.0.0:", port))
-    }
-
-    list(new=TRUE, port=port)
+    list(new=TRUE, port=port, url=assemble_url(port))
 }
 
 #' @import methods
@@ -107,6 +102,10 @@ choose_port <- function() {
     }
 }
 
+assemble_url <- function(port) { 
+    paste0("http://0.0.0.0:", port)
+}
+
 kill_SewerRat <- function(process) {
     if (!is.null(process$pid)) {
         system2("kill", c("-9", process$pid))
@@ -123,10 +122,6 @@ stopSewerRat <- function() {
         running$active$pid <- NULL # need to NULL this explicitly so that the reg.finalizer doesn't run.
         running$active <- NULL
         running$port <- NULL
-        if (!is.null(running$url)) {
-            restUrl(running$url)
-            running$url <- NULL
-        }
     }
     invisible(NULL)
 }

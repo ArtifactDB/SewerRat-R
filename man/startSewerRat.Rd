@@ -5,7 +5,7 @@
 \alias{stopSewerRat}
 \title{Start and stop a SewerRat service}
 \usage{
-startSewerRat(db = tempfile(fileext = ".sqlite3"), port = NULL, setUrl = TRUE)
+startSewerRat(db = tempfile(fileext = ".sqlite3"), port = NULL)
 
 stopSewerRat()
 }
@@ -14,15 +14,11 @@ stopSewerRat()
 
 \item{port}{Integer specifying the port to use for hosting the service.
 If \code{NULL}, a free port is randomly selected.}
-
-\item{setUrl}{Logical scalar indicating whether \code{\link{restUrl}} should be updated to use the new service.}
 }
 \value{
-For \code{startSewerRat}, a list indicating whether a new service was set up, along with the port number.
-If \code{setUrl=TRUE}, the REST URL is updated to this new service.
+For \code{startSewerRat}, a list indicating whether a new service was set up, along with the port number and URL to use in other \pkg{SewerRat} functions.
 
 For \code{stopSewerRat}, any existing service is shut down, and \code{NULL} is invisibly returned.
-The REST URL is also reset to its previous value if it was changed by \code{startSewerRat}.
 }
 \description{
 This sets up a single SewerRat service for the entire R session, is intended for examples and tests.
@@ -30,8 +26,10 @@ Real SewerRat deployments should operate outside of R.
 }
 \examples{
 startSewerRat()
-restUrl()
+startSewerRat() # repeated calls just re-use the same instance.
+
 stopSewerRat()
+startSewerRat() # initialize a new instance.
 
 }
 \seealso{

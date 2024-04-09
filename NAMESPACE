@@ -2,10 +2,7 @@
 
 export(deregister)
 export(query)
-export(quickRead)
-export(quickSave)
 export(register)
-export(restUrl)
 export(startSewerRat)
 export(stopSewerRat)
 import(httr2)

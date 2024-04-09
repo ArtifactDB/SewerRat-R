@@ -4,7 +4,7 @@
 \alias{deregister}
 \title{Deregister a directory from the index}
 \usage{
-deregister(dir, url = restUrl(), wait = 1)
+deregister(dir, url, wait = 1)
 }
 \arguments{
 \item{dir}{String containing the path to the directory to be deregistered.}
@@ -23,20 +23,17 @@ or that the directory is world-readable and you have write access to it.
 }
 \examples{
 # Start up an example SewerRat service:
-startSewerRat()
+info <- startSewerRat()
 
 tmp <- tempfile()
 dir.create(tmp)
 write(file=file.path(tmp, "whee.json"), '{ "foo": "bar" }')
-register(tmp, "whee.json")
-query("bar")
+register(tmp, "whee.json", url=info$url)
+query("bar", url=info$url)
 
 # After deregistration, the files cannot be queried.
-deregister(tmp)
-query("bar")
-
-# Okay, stop the service:
-stopSewerRat()
+deregister(tmp, url=info$url)
+query("bar", url=info$url)
 }
 \author{
 Aaron Lun

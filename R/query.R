@@ -50,7 +50,7 @@
 #' @author Aaron Lun
 #' @examples
 #' # Starting up an example SewerRat service:
-#' startSewerRat()
+#' info <- startSewerRat()
 #'
 #' # Mocking up a directory of stuff to query.
 #' mydir <- tempfile()
@@ -61,22 +61,19 @@
 #'    '{ "meal": "lunch", "ingredients": "water" }')
 #'
 #' # Registering it:
-#' register(mydir, "metadata.json")
+#' register(mydir, "metadata.json", url=info$url)
 #'
-#' query("aaron")
-#' query("lun%") 
-#' query("lun% AND aaron")
-#' query("meal:bar%")
+#' query("aaron", url=info$url)
+#' query("lun%", url=info$url) 
+#' query("lun% AND aaron", url=info$url)
+#' query("meal:bar%", url=info$url)
 #'
-#' query(path="diet/") # has 'diet/' in the path
-#' query(user=Sys.info()["user"]) # created by the current user
-#' query(from=Sys.time() - 60) # no more than 1 minute old
-#'
-#' # Okay, stop the service:
-#' stopSewerRat()
+#' query(path="diet/", url=info$url) # has 'diet/' in the path
+#' query(user=Sys.info()["user"], url=info$url) # created by the current user
+#' query(from=Sys.time() - 60, url=info$url) # no more than 1 minute old
 #' @export
 #' @import httr2
-query <- function(text, user, path, from, until, number=100, url=restUrl()) {
+query <- function(text, user, path, from, until, url, number=100) {
     conditions <- list()
 
     if (!missing(text)) {

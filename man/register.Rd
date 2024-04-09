@@ -4,14 +4,12 @@
 \alias{register}
 \title{Register a directory for indexing}
 \usage{
-register(dir, names = "_metadata.json", url = restUrl(), wait = 1)
+register(dir, names, url, wait = 1)
 }
 \arguments{
 \item{dir}{String containing the path to the directory to be registered.}
 
-\item{names}{Character vector containing the base names of the metadata files.
-Defaults to \code{_metadata.json} for convenient use with \code{\link{quickSave}},
-but any number of base names can be supplied here.}
+\item{names}{Character vector containing the base names of the metadata files.}
 
 \item{url}{String containing the URL to the SewerRat REST API.}
 
@@ -27,7 +25,7 @@ This assumes that the directory is world-readable and you have write access to i
 }
 \examples{
 # Start up an example SewerRat service:
-startSewerRat()
+info <- startSewerRat()
 
 # Mocking up a directory:
 tmp <- tempfile()
@@ -35,11 +33,8 @@ dir.create(tmp)
 write(file=file.path(tmp, "metadata.json"), '{ "name": "Aaron" }')
 
 # Once we register it, we can query its contents.
-register(tmp, "metadata.json")
-query("Aaron")
-
-# Okay, stop the service:
-stopSewerRat()
+register(tmp, "metadata.json", url=info$url)
+query("Aaron", url=info$url)
 }
 \author{
 Aaron Lun

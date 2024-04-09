@@ -5,8 +5,6 @@
 #'
 #' @param dir String containing the path to the directory to be registered.
 #' @param names Character vector containing the base names of the metadata files.
-#' Defaults to \code{_metadata.json} for convenient use with \code{\link{quickSave}},
-#' but any number of base names can be supplied here.
 #' @param url String containing the URL to the SewerRat REST API.
 #' @param wait Numeric scalar specifying the number of seconds to wait for the filesystem to synchronize.
 #'
@@ -17,7 +15,7 @@
 #'
 #' @examples
 #' # Start up an example SewerRat service:
-#' startSewerRat()
+#' info <- startSewerRat()
 #'
 #' # Mocking up a directory:
 #' tmp <- tempfile()
@@ -25,14 +23,11 @@
 #' write(file=file.path(tmp, "metadata.json"), '{ "name": "Aaron" }')
 #'
 #' # Once we register it, we can query its contents.
-#' register(tmp, "metadata.json")
-#' query("Aaron")
-#'
-#' # Okay, stop the service:
-#' stopSewerRat()
+#' register(tmp, "metadata.json", url=info$url)
+#' query("Aaron", url=info$url)
 #' @export
 #' @import httr2
-register <- function(dir, names = "_metadata.json", url=restUrl(), wait=1) {
+register <- function(dir, names, url, wait=1) {
     dir <- normalizePath(dir, mustWork=TRUE)
     stopifnot(length(names) > 0)
 
