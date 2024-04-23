@@ -34,6 +34,7 @@ register <- function(dir, names, url, wait=1) {
     req <- request(paste0(url, "/register/start"))
     req <- req_method(req, "POST")
     req <- req_body_json(req, list(path=dir))
+    req <- redirect_post(req)
     req <- handle_error(req)
     res <- req_perform(req)
 
@@ -47,7 +48,8 @@ register <- function(dir, names, url, wait=1) {
     req <- request(paste0(url, "/register/finish"))
     req <- req_method(req, "POST")
     req <- req_body_json(req, list(path=dir, base=as.list(names)))
-    req <- req_error(req, body = function(res) resp_body_json(res)$reason)
+    req <- redirect_post(req)
+    req <- handle_error(req)
     res <- req_perform(req)
 
     payload <- resp_body_json(res)

@@ -11,3 +11,8 @@ handle_error <- function(req) {
         }
     })
 }
+
+#' @import httr2
+redirect_post <- function(req) {
+    req_options(req, postredir=7) # see https://curl.se/libcurl/c/CURLOPT_POSTREDIR.html.
+}

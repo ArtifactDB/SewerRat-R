@@ -32,6 +32,7 @@ deregister <- function(dir, url, wait=1) {
     req <- request(paste0(url, "/deregister/start"))
     req <- req_method(req, "POST")
     req <- req_body_json(req, list(path=dir))
+    req <- redirect_post(req)
     req <- handle_error(req)
     res <- req_perform(req)
 
@@ -46,7 +47,8 @@ deregister <- function(dir, url, wait=1) {
         req <- request(paste0(url, "/deregister/finish"))
         req <- req_method(req, "POST")
         req <- req_body_json(req, list(path=dir))
-        req <- req_error(req, body = function(res) resp_body_json(res)$reason)
+        req <- redirect_post(req)
+        req <- handle_error(req)
         res <- req_perform(req)
     }
 
