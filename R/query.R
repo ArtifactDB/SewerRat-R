@@ -111,7 +111,7 @@ query <- function(text, user, path, from, until, url, number=100) {
         req <- request(paste0(url, paste0(stub, "&limit=", number - length(collected))))
         req <- req_method(req, "POST")
         req <- req_body_json(req, query)
-        req <- req_error(req, body = function(res) resp_body_json(res)$reason)
+        req <- handle_error(req)
         res <- req_perform(req)
 
         payload <- resp_body_json(res)
