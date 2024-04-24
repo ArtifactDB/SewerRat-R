@@ -11,9 +11,6 @@ Imports:
     methods,
     httr2
 Suggests:
-    S4Vectors,
-    jsonlite,
-    alabaster.base,
     knitr,
     BiocStyle
 License: MIT + file LICENSE
