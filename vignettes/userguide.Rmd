@@ -4,11 +4,11 @@ author:
 - name: Aaron Lun
   email: infinite.monkeys.with.keyboards@gmail.com
 package: SewerRat
-date: "Revised: April 2, 2024"
+date: "Revised: April 24, 2024"
 output:
   BiocStyle::html_document
 vignette: >
-  %\VignetteIndexEntry{Hitting the gypsum API}
+  %\VignetteIndexEntry{Hitting the SewerRat API}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -22,9 +22,9 @@ knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE)
 # Introduction
 
 The `r self` package implements an R client for the [API of the same name](https://github.com/ArtifactDB/SewerRat).
-This allows users to easily query the SewerRat search index, register or deregister their own directories in the index, and quickly save and load Bioconductor objects for registration.
-It is assumed that the users of the `r self` client and the SewerRat API itself are accessing the same shared filesystem;
-this is typically the case for high-performance computing (HPC) clusters in scientific institutions.
+This allows users to easily register or deregister their own directories in the index for subsequent queries.
+Readers are referred to [SewerRat documentation](https://github.com/ArtifactDB/SewerRat) for a description of the concepts;
+this guide will strictly focus on the usage of the `r self` package.
 For demonstration purposes, we'll set up a test instance of the API on our local machine:
 
 ```{r}
@@ -35,7 +35,10 @@ info$url
 
 # Registering directories
 
-Let's mock up a directory of metadata files:
+We assume that the users of the `r self` package and the SewerRat API itself are both on the same shared filesystem.
+The idea is that a user can instruct SewerRat to incorporate a particular directory into the search index,
+provided that the to-be-registered directory is world-readable and that the caller has write access to it.
+To illustrate, let's mock up a directory of metadata files:
 
 ```{r}
 mydir <- tempfile()
@@ -46,7 +49,7 @@ write(file=file.path(mydir, "stuff", "metadata.json"), '{ "food": "barramundi" }
 ```
 
 We can then easily register it with the `register()` function.
-The example below will only index metadata files inside `mydir` named 'metadata.json', though any number of base names can be supplied here.
+The example below will only index metadata files inside `mydir` named `metadata.json`, though any number of base names can be supplied here.
 
 ```{r}
 library(SewerRat)
@@ -54,11 +57,11 @@ register(mydir, names="metadata.json", url=info$url)
 ```
 
 Similarly, we can deregister this directory with `deregister()`.
-All registration actions assume that the caller has write access to the to-be-(de)registered directory.
 
 # Searching the index
 
 We use the `query()` function to perform free-text searches on the indexed metadata.
+This function does not require filesystem access and can be executed remotely.
 
 ```{r}
 lapply(query("foo", url=info$url), function(x) x$path)
@@ -80,13 +83,6 @@ Or indeed, any combination of these fields, which are treated as a boolean AND i
 ```{r}
 query("barramundi", path="stuff", url=info$url)
 ```
-
-# Administrator instructions
-
-The URL to the SewerRat REST API depends on the instance and needs to be specified correctly before `r self` functions can be used.
-Administrators of an R installation can achieve this by setting the `SEWERRAT_REST_URL` environment variable before `r self` package load.
-Developers of packages that call `r self` can either pass in a URL to the `url=` argument in various `r self` functions,
-or they can globally set the URL via the `restUrl()` function.
 
 # Session information {-}
 

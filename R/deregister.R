@@ -2,7 +2,7 @@
 #'
 #' Remove a directory on the shared filesystem from the search index.
 #' This assumes that either the directory does not exist,
-#' or that the directory is world-readable and you have write access to it.
+#' or that the directory is world-readable and the caller has write access to it.
 #'
 #' @param dir String containing the path to the directory to be deregistered.
 #' @inheritParams register

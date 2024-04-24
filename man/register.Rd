@@ -21,7 +21,7 @@ A warning is raised if any particular metadata file cannot be indexed.
 }
 \description{
 Register a directory on a shared filesystem for inclusion into the search index.
-This assumes that the directory is world-readable and you have write access to it.
+This assumes that the directory is world-readable and the caller has write access to it.
 }
 \examples{
 # Start up an example SewerRat service:

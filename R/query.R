@@ -1,6 +1,7 @@
 #' Query metadata 
 #'
 #' Query the metadata in the SewerRat backend based on free text, the owner, creation time, etc.
+#' This function does not require access to the same filesystem as the SewerRat API. 
 #'
 #' @param text String containing a free-text query, see below for details.
 #' If missing, no filtering is applied based on the metadata text.

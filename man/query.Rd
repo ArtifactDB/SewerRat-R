@@ -37,6 +37,7 @@ List of lists where each inner list corresponds to a metadata file and contains:
 }
 \description{
 Query the metadata in the SewerRat backend based on free text, the owner, creation time, etc.
+This function does not require access to the same filesystem as the SewerRat API.
 }
 \section{Formatting the text query}{
 

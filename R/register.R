@@ -1,7 +1,7 @@
 #' Register a directory for indexing
 #'
 #' Register a directory on a shared filesystem for inclusion into the search index.
-#' This assumes that the directory is world-readable and you have write access to it.
+#' This assumes that the directory is world-readable and the caller has write access to it.
 #'
 #' @param dir String containing the path to the directory to be registered.
 #' @param names Character vector containing the base names of the metadata files.
