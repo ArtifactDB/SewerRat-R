@@ -31,6 +31,15 @@
     <loc>/reference/register.html</loc>
   </url>
   <url>
+    <loc>/reference/retrieveDirectory.html</loc>
+  </url>
+  <url>
+    <loc>/reference/retrieveFile.html</loc>
+  </url>
+  <url>
+    <loc>/reference/retrieveMetadata.html</loc>
+  </url>
+  <url>
     <loc>/reference/startSewerRat.html</loc>
   </url>
 </urlset>
