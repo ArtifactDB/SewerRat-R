@@ -9,10 +9,9 @@ listFiles(path, url, forceRemote = FALSE)
 \arguments{
 \item{path}{String containing the path to the registered (sub)directory.}
 
-\item{url}{String containing the URL to the SewerRat REST API.}
+\item{url}{String containing the URL of the SewerRat REST API.}
 
-\item{forceRemote}{Logical scalar indicating whether to force remote access.
-This will download all files in the \code{path} via the REST API and cache them locally,
+\item{forceRemote}{Logical scalar indicating whether to force remote access,
 even if \code{path} is on the same filesystem as the caller.}
 }
 \value{

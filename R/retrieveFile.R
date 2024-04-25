@@ -1,7 +1,7 @@
 #' Retrieve a single file
 #'
 #' Retrieve the path to a single file in a registered directory. 
-#' This will call the REST API if the caller is not on the same filesystem as the registry.
+#' This will call the REST API to obtain and cache a copy of the file if the caller is not on the same filesystem. 
 #'
 #' @param path String containing the absolute path to a file in a registered directory.
 #' @param forceRemote Logical scalar indicating whether to force remote access.

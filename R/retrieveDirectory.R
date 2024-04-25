@@ -3,7 +3,7 @@
 #' Retrieve the path to a registered directory (or its subdirectories), 
 #' possibly creating a local copy of the directory's contents if the caller is not on the same filesystem.
 #'
-#' @param path String containing the absolute path to a directory.
+#' @param path String containing the absolute path to a registered directory.
 #' @param url String containing the URL to the SewerRat REST API.
 #' @param cache String containing a path to a cache directory.
 #' If \code{NULL}, an appropriate location is automatically chosen.

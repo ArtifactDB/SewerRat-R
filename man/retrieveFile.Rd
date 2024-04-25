@@ -27,7 +27,7 @@ String containing the path to the file on the caller's filesystem.
 }
 \description{
 Retrieve the path to a single file in a registered directory. 
-This will call the REST API if the caller is not on the same filesystem as the registry.
+This will call the REST API to obtain and cache a copy of the file if the caller is not on the same filesystem.
 }
 \examples{
 info <- startSewerRat()

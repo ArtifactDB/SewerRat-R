@@ -84,6 +84,32 @@ Or indeed, any combination of these fields, which are treated as a boolean AND i
 query("barramundi", path="stuff", url=info$url)
 ```
 
+# Retrieving files
+
+Typically, users of the `r self` package are expected to be on the same filesystem as the SewerRat API, so the contents of the files/directories can be inspected using standard methods.
+However, SewerRat also supports remote access for listing of files in registered directories:
+
+```{r}
+listFiles(mydir, url=info$url)
+```
+
+As well as retrieval of file contents in any registered directory.
+Note that this can be applied to any file in the directory, not just the metadata files that were registered.
+
+```{r}
+readLines(retrieveFile(file.path(mydir, "metadata.json"), url=info$url))
+
+# Or we can just retrieve the entire directory:
+dirpath <- retrieveDirectory(file.path(mydir), url=info$url)
+readLines(file.path(dirpath, "stuff", "metadata.json"))
+```
+
+We can also directly retrieve individual metadata files, with extra details about the owner and modification time:
+
+```{r}
+retrieveMetadata(file.path(mydir, "metadata.json"), url=info$url)
+```
+
 # Session information {-}
 
 ```{r}

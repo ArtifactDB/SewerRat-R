@@ -4,7 +4,9 @@
 #' This will call the REST API if the caller is not on the same filesystem. 
 #'
 #' @param path String containing the path to the registered (sub)directory.
-#' @inheritParams retrieveDirectory
+#' @param url String containing the URL of the SewerRat REST API.
+#' @param forceRemote Logical scalar indicating whether to force remote access,
+#' even if \code{path} is on the same filesystem as the caller.
 #'
 #' @author Aaron Lun
 #'

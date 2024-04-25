@@ -14,7 +14,7 @@ retrieveDirectory(
 )
 }
 \arguments{
-\item{path}{String containing the absolute path to a directory.}
+\item{path}{String containing the absolute path to a registered directory.}
 
 \item{url}{String containing the URL to the SewerRat REST API.}
 

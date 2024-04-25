@@ -2,12 +2,15 @@
 #'
 #' Retrieve a single metadata entry in a registered directory from the SewerRat API.
 #'
-#' @param path String containing the absolute path to a file in a registered directory.
-#' @inheritParams retrieveDirectory
+#' @param path String containing the absolute path to a metadata file in a registered directory.
+#' @param url String containing the URL to the SewerRat REST API.
 #'
 #' @author Aaron Lun
 #' 
-#' @return String containing the path to the file on the caller's filesystem.
+#' @return A named list containing \code{path}, the path to the metadata file;
+#' \code{user}, the identity of the owning user;
+#' \code{time}, the Unix time at which the file was modified;
+#' and \code{metadata}, the loaded metadata, typically as a named list representing a JSON object.
 #' 
 #' @examples
 #' info <- startSewerRat()
