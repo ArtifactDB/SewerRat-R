@@ -28,7 +28,7 @@
 #' @export
 #' @import httr2
 register <- function(dir, names, url, wait=1) {
-    dir <- normalizePath(dir, mustWork=TRUE)
+    dir <- clean_path(dir)
     stopifnot(length(names) > 0)
 
     req <- request(paste0(url, "/register/start"))

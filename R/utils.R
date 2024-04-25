@@ -16,3 +16,25 @@ handle_error <- function(req) {
 redirect_post <- function(req) {
     req_options(req, postredir=7) # see https://curl.se/libcurl/c/CURLOPT_POSTREDIR.html.
 }
+
+clean_path <- function(path) {
+    if (!startsWith(path, "/")) {
+        path <- paste0(getwd(), "/", path)
+    }
+    path <- gsub("/+", "/", path)
+
+    components <- strsplit(path, "/")[[1]]
+    keep <- logical(length(components))
+    for (i in seq_along(components)) {
+        comp <- components[i]
+        if (comp == "..") {
+            keep[i-1] <- FALSE
+        } else if (comp != "") {
+            keep[i] <- TRUE
+        }
+    }
+
+    keep[1] <- TRUE # keep as an absolute path.
+    components <- components[keep]
+    paste(components, collapse="/")
+}

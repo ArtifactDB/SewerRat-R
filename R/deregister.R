@@ -27,7 +27,7 @@
 #' @export
 #' @import httr2
 deregister <- function(dir, url, wait=1) {
-    dir <- normalizePath(dir, mustWork=TRUE)
+    dir <- clean_path(dir)
 
     req <- request(paste0(url, "/deregister/start"))
     req <- req_method(req, "POST")
