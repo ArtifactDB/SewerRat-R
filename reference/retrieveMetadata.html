@@ -71,7 +71,10 @@
     <h2>Value</h2>
     
 
-<p>String containing the path to the file on the caller's filesystem.</p>
+<p>A named list containing <code>path</code>, the path to the metadata file;
+<code>user</code>, the identity of the owning user;
+<code>time</code>, the Unix time at which the file was modified;
+and <code>metadata</code>, the loaded metadata, typically as a named list representing a JSON object.</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -95,13 +98,13 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">retrieveMetadata</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">mydir</span>, <span class="st">"/metadata.json"</span><span class="op">)</span>, url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpLPGkQF/file21c1906b10c/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpSqolb4/file21c24ddbfaa/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1714064516</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1714066269</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $metadata$first</span>
@@ -113,13 +116,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">retrieveMetadata</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">mydir</span>, <span class="st">"/diet/metadata.json"</span><span class="op">)</span>, url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpLPGkQF/file21c1906b10c/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpSqolb4/file21c24ddbfaa/diet/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1714064516</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1714066269</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $metadata$meal</span>
