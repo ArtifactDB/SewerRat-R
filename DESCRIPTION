@@ -8,11 +8,15 @@ Description:
     Save Bioconductor objects into standard formats for sharing and collaboration.
 Authors@R: person("Aaron", "Lun", role=c("aut", "cre"), email="infinite.monkeys.with.keyboards@gmail.com")
 Imports:
+    utils,
     methods,
     httr2
 Suggests:
     knitr,
-    BiocStyle
+    BiocStyle,
+    parallel,
+    jsonlite,
+    testthat
 License: MIT + file LICENSE
 Encoding: UTF-8
 RoxygenNote: 7.3.1
