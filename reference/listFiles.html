@@ -18,7 +18,7 @@ This will call the REST API if the caller is not on the same filesystem."><!-- m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">SewerRat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2</span>
       </span>
     </div>
 
@@ -67,6 +67,12 @@ This will call the REST API if the caller is not on the same filesystem.</p>
 
 <dt>url</dt>
 <dd><p>String containing the URL to the SewerRat REST API.</p></dd>
+
+
+<dt>forceRemote</dt>
+<dd><p>Logical scalar indicating whether to force remote access.
+This will download all files in the <code>path</code> via the REST API and cache them locally,
+even if <code>path</code> is on the same filesystem as the caller.</p></dd>
 
 </dl></div>
     <div id="value">
