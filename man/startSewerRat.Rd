@@ -5,7 +5,13 @@
 \alias{stopSewerRat}
 \title{Start and stop a SewerRat service}
 \usage{
-startSewerRat(db = tempfile(fileext = ".sqlite3"), port = NULL)
+startSewerRat(
+  db = tempfile(fileext = ".sqlite3"),
+  port = NULL,
+  wait = 1,
+  version = "0.1.2",
+  overwrite = FALSE
+)
 
 stopSewerRat()
 }
@@ -14,6 +20,12 @@ stopSewerRat()
 
 \item{port}{Integer specifying the port to use for hosting the service.
 If \code{NULL}, a free port is randomly selected.}
+
+\item{wait}{Integer specifying the number of seconds to wait for service initialization.}
+
+\item{version}{String containing the desired version of the Gobbler binary.}
+
+\item{overwrite}{Logical scalar indicating whether to redownload the Gobbler binary.}
 }
 \value{
 For \code{startSewerRat}, a list indicating whether a new service was set up, along with the port number and URL to use in other \pkg{SewerRat} functions.

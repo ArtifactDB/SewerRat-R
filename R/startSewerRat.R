@@ -6,6 +6,9 @@
 #' @param db String containing a path to the SQLite database.
 #' @param port Integer specifying the port to use for hosting the service.
 #' If \code{NULL}, a free port is randomly selected.
+#' @param wait Integer specifying the number of seconds to wait for service initialization.
+#' @param overwrite Logical scalar indicating whether to redownload the Gobbler binary.
+#' @param version String containing the desired version of the Gobbler binary.
 #'
 #' @return For \code{startSewerRat}, a list indicating whether a new service was set up, along with the port number and URL to use in other \pkg{SewerRat} functions.
 #'
@@ -23,7 +26,7 @@
 #' 
 #' @export
 #' @importFrom utils download.file
-startSewerRat <- function(db=tempfile(fileext=".sqlite3"), port=NULL) {
+startSewerRat <- function(db=tempfile(fileext=".sqlite3"), port=NULL, wait = 1, version = "0.1.2", overwrite = FALSE) {
     if (!is.null(running$active)) {
         return(list(new=FALSE, port=running$port, url=assemble_url(running$port)))
     }
@@ -52,9 +55,9 @@ startSewerRat <- function(db=tempfile(fileext=".sqlite3"), port=NULL) {
     }
 
     desired <- sprintf("SewerRat-%s-%s", os, arch)
-    exe <- file.path(cache, desired)
-    if (!file.exists(exe)) {
-        url <- paste0("https://github.com/ArtifactDB/SewerRat/releases/download/latest/", desired)
+    exe <- file.path(cache, paste0(desired, version))
+    if (!file.exists(exe) || overwrite) {
+        url <- paste0("https://github.com/ArtifactDB/SewerRat/releases/download/", version, "/", desired)
         tmp <- tempfile()
         if (download.file(url, tmp)) {
             stop("failed to download the SewerRat binary")
@@ -76,6 +79,7 @@ startSewerRat <- function(db=tempfile(fileext=".sqlite3"), port=NULL) {
 
     script <- system.file("scripts", "deploy.sh", package="SewerRat", mustWork=TRUE)
     pid <- system2(script, c(shQuote(exe), shQuote(db), shQuote(port)), stdout=TRUE) 
+    Sys.sleep(wait)
 
     process <- new.env()
     process$pid <- pid
