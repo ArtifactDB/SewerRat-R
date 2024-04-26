@@ -18,7 +18,7 @@ Real SewerRat deployments should operate outside of R."><!-- mathjax --><script 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">SewerRat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
       </span>
     </div>
 
@@ -56,7 +56,13 @@ Real SewerRat deployments should operate outside of R.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">startSewerRat</span><span class="op">(</span>db <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".sqlite3"</span><span class="op">)</span>, port <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">startSewerRat</span><span class="op">(</span></span>
+<span>  db <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".sqlite3"</span><span class="op">)</span>,</span>
+<span>  port <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  wait <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  version <span class="op">=</span> <span class="st">"0.1.2"</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">stopSewerRat</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -70,6 +76,18 @@ Real SewerRat deployments should operate outside of R.</p>
 <dt>port</dt>
 <dd><p>Integer specifying the port to use for hosting the service.
 If <code>NULL</code>, a free port is randomly selected.</p></dd>
+
+
+<dt>wait</dt>
+<dd><p>Integer specifying the number of seconds to wait for service initialization.</p></dd>
+
+
+<dt>version</dt>
+<dd><p>String containing the desired version of the Gobbler binary.</p></dd>
+
+
+<dt>overwrite</dt>
+<dd><p>Logical scalar indicating whether to redownload the Gobbler binary.</p></dd>
 
 </dl></div>
     <div id="value">
