@@ -1,4 +1,4 @@
-# Test the retrieval functions.
+# Test the utility functions.
 # library(testthat); library(SewerRat); source("test-utils.R")
 
 test_that("clean_path works as expected", {
@@ -11,6 +11,15 @@ test_that("clean_path works as expected", {
 
     x <- SewerRat:::clean_path("//absd//a//../foo/bar")
     expect_identical(x, "/absd/foo/bar")
+
+    x <- SewerRat:::clean_path("/xxxx/bbb/../../foo/bar")
+    expect_identical(x, "/foo/bar")
+
+    x <- SewerRat:::clean_path("/../absd")
+    expect_identical(x, "/absd")
+
+    x <- SewerRat:::clean_path("/absd/./bar/./")
+    expect_identical(x, "/absd/bar")
 
     x <- SewerRat:::clean_path("/a/b/c/d/")
     expect_identical(x, "/a/b/c/d")

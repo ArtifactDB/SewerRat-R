@@ -17,24 +17,28 @@ redirect_post <- function(req) {
     req_options(req, postredir=7) # see https://curl.se/libcurl/c/CURLOPT_POSTREDIR.html.
 }
 
+#' @importFrom utils head
 clean_path <- function(path) {
     if (!startsWith(path, "/")) {
         path <- paste0(getwd(), "/", path)
     }
-    path <- gsub("/+", "/", path)
 
     components <- strsplit(path, "/")[[1]]
-    keep <- logical(length(components))
+    keep <- character(0)
     for (i in seq_along(components)) {
         comp <- components[i]
         if (comp == "..") {
-            keep[i-1] <- FALSE
-        } else if (comp != "") {
-            keep[i] <- TRUE
+            # 'head()' is robust to '..' at the start of the path.
+            keep <- head(keep, -1)
+        } else if (comp == "") {
+            # no-op, it's a redundant '//' or we're at the start.
+        } else if (comp == ".") {
+            # no-op as well.
+        } else {
+            keep <- c(keep, comp)
         }
     }
 
-    keep[1] <- TRUE # keep as an absolute path.
-    components <- components[keep]
-    paste(components, collapse="/")
+    keep <- c("", keep) # add back the root.
+    paste(keep, collapse="/")
 }

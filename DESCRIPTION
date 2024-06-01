@@ -1,6 +1,6 @@
 Package: SewerRat
-Version: 0.2.3
-Date: 2024-04-26
+Version: 0.2.4
+Date: 2024-05-31
 Title: Client for the SewerRat API
 Description: 
     Search metadata files across a shared filesystem via the SewerRat API.

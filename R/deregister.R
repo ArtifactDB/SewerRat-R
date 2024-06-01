@@ -5,6 +5,7 @@
 #' or that the directory is world-readable and the caller has write access to it.
 #'
 #' @param dir String containing the path to the directory to be deregistered.
+#' This may be a relative or absolute path.
 #' @inheritParams register
 #'
 #' @return On success, the directory is deregistered and NULL is invisibly returned.

@@ -7,7 +7,8 @@
 register(dir, names, url, wait = 1)
 }
 \arguments{
-\item{dir}{String containing the path to the directory to be registered.}
+\item{dir}{String containing the path to the directory to be registered.
+This may be a relative or absolute path.}
 
 \item{names}{Character vector containing the base names of the metadata files.}
 

@@ -4,6 +4,7 @@
 #' This assumes that the directory is world-readable and the caller has write access to it.
 #'
 #' @param dir String containing the path to the directory to be registered.
+#' This may be a relative or absolute path.
 #' @param names Character vector containing the base names of the metadata files.
 #' @param url String containing the URL to the SewerRat REST API.
 #' @param wait Numeric scalar specifying the number of seconds to wait for the filesystem to synchronize.

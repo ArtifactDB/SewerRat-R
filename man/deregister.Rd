@@ -7,7 +7,8 @@
 deregister(dir, url, wait = 1)
 }
 \arguments{
-\item{dir}{String containing the path to the directory to be deregistered.}
+\item{dir}{String containing the path to the directory to be deregistered.
+This may be a relative or absolute path.}
 
 \item{url}{String containing the URL to the SewerRat REST API.}
 
