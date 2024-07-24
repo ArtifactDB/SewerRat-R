@@ -4,7 +4,7 @@
 \alias{deregister}
 \title{Deregister a directory from the index}
 \usage{
-deregister(dir, url, wait = 1)
+deregister(dir, url, retry = 3, wait = 1)
 }
 \arguments{
 \item{dir}{String containing the path to the directory to be deregistered.
@@ -12,7 +12,10 @@ This may be a relative or absolute path.}
 
 \item{url}{String containing the URL to the SewerRat REST API.}
 
-\item{wait}{Numeric scalar specifying the number of seconds to wait for the filesystem to synchronize.}
+\item{retry}{Integer scalar specifying the number of times to try to finish the registration.
+Larger values may be necessary if \code{dir} is in a network share that takes some time to synchronise.}
+
+\item{wait}{Numeric scalar specifying the number of seconds to wait before each retry.}
 }
 \value{
 On success, the directory is deregistered and NULL is invisibly returned.

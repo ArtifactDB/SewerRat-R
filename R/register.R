@@ -7,7 +7,9 @@
 #' This may be a relative or absolute path.
 #' @param names Character vector containing the base names of the metadata files.
 #' @param url String containing the URL to the SewerRat REST API.
-#' @param wait Numeric scalar specifying the number of seconds to wait for the filesystem to synchronize.
+#' @param retry Integer scalar specifying the number of times to try to finish the registration.
+#' Larger values may be necessary if \code{dir} is in a network share that takes some time to synchronise.
+#' @param wait Numeric scalar specifying the number of seconds to wait before each retry.
 #'
 #' @return On success, the directory is registered and NULL is invisibly returned.
 #' A warning is raised if any particular metadata file cannot be indexed.
@@ -28,7 +30,7 @@
 #' query("Aaron", url=info$url)
 #' @export
 #' @import httr2
-register <- function(dir, names, url, wait=1) {
+register <- function(dir, names, url, retry=3, wait=1) {
     dir <- clean_path(dir)
     stopifnot(length(names) > 0)
 
@@ -44,14 +46,25 @@ register <- function(dir, names, url, wait=1) {
     write(file=target, character(0))
     on.exit(unlink(target))
 
-    Sys.sleep(wait) # some leeway to allow slow network shares to sync.
+    for (attempt in seq_len(retry)) {
+        Sys.sleep(wait) # some leeway to allow slow network shares to sync.
 
-    req <- request(paste0(url, "/register/finish"))
-    req <- req_method(req, "POST")
-    req <- req_body_json(req, list(path=dir, base=as.list(names)))
-    req <- redirect_post(req)
-    req <- handle_error(req)
-    res <- req_perform(req)
+        req <- request(paste0(url, "/register/finish"))
+        req <- req_method(req, "POST")
+        req <- req_body_json(req, list(path=dir, base=as.list(names)))
+        req <- redirect_post(req)
+
+        if (attempt == retry) {
+            req <- handle_error(req)
+            res <- req_perform(req)
+        } else {
+            req <- handle_error_with_sync(req)
+            res <- req_perform(req)
+            if (resp_status(res) < 400) {
+                break
+            }
+        }
+    }
 
     payload <- resp_body_json(res)
     for (w in payload$comments) {
@@ -59,4 +72,15 @@ register <- function(dir, names, url, wait=1) {
     }
 
     invisible(NULL)
+}
+
+handle_error_with_sync <- function(req) {
+    req_error(
+        req, 
+        body = extract_error_message, 
+        is_error = function(res) {
+            code <- resp_status(res) 
+            code >= 400 && code != 401 # unauthorized is fine if the synchronization hasn't happened yet.
+        }
+    )
 }

@@ -4,7 +4,7 @@
 \alias{register}
 \title{Register a directory for indexing}
 \usage{
-register(dir, names, url, wait = 1)
+register(dir, names, url, retry = 3, wait = 1)
 }
 \arguments{
 \item{dir}{String containing the path to the directory to be registered.
@@ -14,7 +14,10 @@ This may be a relative or absolute path.}
 
 \item{url}{String containing the URL to the SewerRat REST API.}
 
-\item{wait}{Numeric scalar specifying the number of seconds to wait for the filesystem to synchronize.}
+\item{retry}{Integer scalar specifying the number of times to try to finish the registration.
+Larger values may be necessary if \code{dir} is in a network share that takes some time to synchronise.}
+
+\item{wait}{Numeric scalar specifying the number of seconds to wait before each retry.}
 }
 \value{
 On success, the directory is registered and NULL is invisibly returned.

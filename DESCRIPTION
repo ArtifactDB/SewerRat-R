@@ -1,6 +1,6 @@
 Package: SewerRat
-Version: 0.2.4
-Date: 2024-05-31
+Version: 0.2.5
+Date: 2024-07-23
 Title: Client for the SewerRat API
 Description: 
     Search metadata files across a shared filesystem via the SewerRat API.
@@ -19,5 +19,5 @@ Suggests:
     testthat
 License: MIT + file LICENSE
 Encoding: UTF-8
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 VignetteBuilder: knitr

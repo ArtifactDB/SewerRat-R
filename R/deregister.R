@@ -27,7 +27,7 @@
 #' query("bar", url=info$url)
 #' @export
 #' @import httr2
-deregister <- function(dir, url, wait=1) {
+deregister <- function(dir, url, retry=3, wait=1) {
     dir <- clean_path(dir)
 
     req <- request(paste0(url, "/deregister/start"))
@@ -43,14 +43,25 @@ deregister <- function(dir, url, wait=1) {
         write(file=target, character(0))
         on.exit(unlink(target))
 
-        Sys.sleep(wait) # some leeway to allow slow network shares to sync.
+        for (attempt in seq_len(retry)) {
+            Sys.sleep(wait) # some leeway to allow slow network shares to sync.
 
-        req <- request(paste0(url, "/deregister/finish"))
-        req <- req_method(req, "POST")
-        req <- req_body_json(req, list(path=dir))
-        req <- redirect_post(req)
-        req <- handle_error(req)
-        res <- req_perform(req)
+            req <- request(paste0(url, "/deregister/finish"))
+            req <- req_method(req, "POST")
+            req <- req_body_json(req, list(path=dir))
+            req <- redirect_post(req)
+
+            if (attempt == retry) {
+                req <- handle_error(req)
+                res <- req_perform(req)
+            } else {
+                req <- handle_error_with_sync(req)
+                res <- req_perform(req)
+                if (resp_status(res) < 400) {
+                    break
+                }
+            }
+        }
     }
 
     invisible(NULL)
