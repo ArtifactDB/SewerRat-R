@@ -1,4 +1,4 @@
-#' @import httr2
+#' @import httr1
 extract_error_message <- function(res) {
     ct <- resp_content_type(res)
     if (ct == "application/json") {
@@ -22,6 +22,10 @@ redirect_post <- function(req) {
 
 #' @importFrom utils head
 clean_path <- function(path) {
+    # Don't use normalizePath() here, as that may end up resolving symlinks
+    # that the user wanted to keep (e.g., for aliased drives). Rather, we do
+    # the bare minimum required to obtain a clean absolute path, analogous
+    # to Golang's filepath.Clean().
     if (!startsWith(path, "/")) {
         path <- paste0(getwd(), "/", path)
     }
