@@ -14,10 +14,7 @@ This may be a relative or absolute path.}
 
 \item{url}{String containing the URL to the SewerRat REST API.}
 
-\item{retry}{Integer scalar specifying the number of times to try to finish the registration.
-Larger values may be necessary if \code{dir} is in a network share that takes some time to synchronise.}
-
-\item{wait}{Numeric scalar specifying the number of seconds to wait before each retry.}
+\item{retry, wait}{Deprecated arguments, ignored.}
 }
 \value{
 On success, the directory is registered and NULL is invisibly returned.
