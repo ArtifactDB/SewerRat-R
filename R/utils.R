@@ -1,4 +1,4 @@
-#' @import httr1
+#' @import httr2
 extract_error_message <- function(res) {
     ct <- resp_content_type(res)
     if (ct == "application/json") {
