@@ -26,7 +26,7 @@
 #' 
 #' @export
 #' @importFrom utils download.file
-startSewerRat <- function(db=tempfile(fileext=".sqlite3"), port=NULL, wait = 1, version = "0.1.2", overwrite = FALSE) {
+startSewerRat <- function(db=tempfile(fileext=".sqlite3"), port=NULL, wait = 1, version = "1.0.6", overwrite = FALSE) {
     if (!is.null(running$active)) {
         return(list(new=FALSE, port=running$port, url=assemble_url(running$port)))
     }

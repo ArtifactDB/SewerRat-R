@@ -9,7 +9,7 @@ startSewerRat(
   db = tempfile(fileext = ".sqlite3"),
   port = NULL,
   wait = 1,
-  version = "0.1.2",
+  version = "1.0.6",
   overwrite = FALSE
 )
 
