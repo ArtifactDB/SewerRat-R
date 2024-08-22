@@ -82,33 +82,12 @@ retrieveDirectory <- function(path, url, cache=NULL, forceRemote=FALSE, overwrit
     final
 }
 
+#' @importFrom utils URLencode
 full_file_url <- function(url, path) {
     paste0(url, "/retrieve/file?path=", URLencode(path, reserved=TRUE))
 }
 
-get_remote_last_modified <- function(url, path) {
-    req <- request(full_file_url(url, path))
-    req <- req_method(req, "HEAD")
-    req <- handle_error(req)
-    res <- req_perform(req)
-    remote_mod <- resp_header(res, "last-modified")
-
-    if (is.null(remote_mod)) {
-        warning("failed to find 'last-modified' header from the SewerRat API")
-        return(NULL)
-    }
-
-    remote_mod <- as.POSIXct(remote_mod, format="%a, %d %b %Y %H:%M:%S", tz="GMT")
-    if (is.na(remote_mod)) {
-        warning("invalid 'last-modified' header from the SewerRat API")
-        return(NULL)
-    }
-
-    return(remote_mod) 
-}
-
 #' @import httr2 
-#' @importFrom utils download.file
 acquire_file_raw <- function(cache, path, url, overwrite, updateDelay) {
     target <- file.path(cache, "LOCAL", path)
 
@@ -117,7 +96,11 @@ acquire_file_raw <- function(cache, path, url, overwrite, updateDelay) {
     } else if (!overwrite) {
         last_mod <- file.info(target)$mtime
         if (last_mod + updateDelay < Sys.time()) { # only check older files for updates, to avoid excessive queries.
-            remote_mod <- get_remote_last_modified(url, path)
+            req <- request(full_file_url(url, path))
+            req <- req_method(req, "HEAD")
+            req <- handle_error(req)
+            res <- req_perform(req)
+            remote_mod <- parse_remote_last_modified(res)
             if (!is.null(remote_mod) && remote_mod > last_mod) {
                 overwrite <- TRUE
             }
@@ -130,9 +113,7 @@ acquire_file_raw <- function(cache, path, url, overwrite, updateDelay) {
         tempf <- tempfile(tmpdir=tempdir)
         on.exit(unlink(tempf), add=TRUE, after=FALSE)
 
-        if (download.file(full_file_url(url, path), tempf)) {
-            stop("failed to download '", path, "'")
-        }
+        download_file(full_file_url(url, path), tempf)
         dir.create(dirname(target), recursive=TRUE, showWarnings=FALSE)
         file.rename(tempf, target) # this should be more or less atomic, so no need for locks.
     }

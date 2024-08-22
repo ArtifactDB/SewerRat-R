@@ -25,7 +25,6 @@
 #' startSewerRat() # initialize a new instance.
 #' 
 #' @export
-#' @importFrom utils download.file
 startSewerRat <- function(db=tempfile(fileext=".sqlite3"), port=NULL, wait = 1, version = "1.0.6", overwrite = FALSE) {
     if (!is.null(running$active)) {
         return(list(new=FALSE, port=running$port, url=assemble_url(running$port)))
@@ -59,9 +58,7 @@ startSewerRat <- function(db=tempfile(fileext=".sqlite3"), port=NULL, wait = 1, 
     if (!file.exists(exe) || overwrite) {
         url <- paste0("https://github.com/ArtifactDB/SewerRat/releases/download/", version, "/", desired)
         tmp <- tempfile()
-        if (download.file(url, tmp)) {
-            stop("failed to download the SewerRat binary")
-        }
+        download_file(url, tmp)
         Sys.chmod(tmp, "0755")
 
         # Using a write-and-rename paradigm to provide some atomicity. Note

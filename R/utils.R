@@ -49,3 +49,35 @@ clean_path <- function(path) {
     keep <- c("", keep) # add back the root.
     paste(keep, collapse="/")
 }
+
+#' @import httr2
+parse_remote_last_modified <- function(res) {
+    remote_mod <- resp_header(res, "last-modified")
+
+    if (is.null(remote_mod)) {
+        warning("failed to find 'last-modified' header from the SewerRat API")
+        return(NULL)
+    }
+
+    remote_mod <- as.POSIXct(remote_mod, format="%a, %d %b %Y %H:%M:%S", tz="GMT")
+    if (is.na(remote_mod)) {
+        warning("invalid 'last-modified' header from the SewerRat API")
+        return(NULL)
+    }
+
+    return(remote_mod) 
+}
+
+#' @import httr2
+download_file <- function(url, path) {
+    req <- request(url)
+    req <- handle_error(req)
+    res <- req_perform(req, path=path)
+
+    # The key part here is to set the modification time correctly,
+    # so that any updating mechanisms work correctly.
+    mod <- parse_remote_last_modified(res)
+    if (!is.null(mod)) {
+        Sys.setFileTime(path, mod)
+    }
+}
