@@ -18,6 +18,24 @@ test_that("retrieveFile works as expected", {
     p <- retrieveFile(paste0(mydir, "/metadata.json"), url=info$url, cache=cache, forceRemote=TRUE)
     expect_true(startsWith(p, cache))
     expect_identical(jsonlite::fromJSON(p, simplifyVector=FALSE)$first, "Aaron")
+
+    # Let's try overwriting the cached file and confirming that the cache is unchanged: 
+    write(file=p, "AARON WAS HERE")
+    p2 <- retrieveFile(paste0(mydir, "/metadata.json"), url=info$url, cache=cache, forceRemote=TRUE)
+    expect_identical(p, p2)
+    expect_identical(readLines(p), "AARON WAS HERE")
+
+    # Unless we force an overwrite:
+    p2 <- retrieveFile(paste0(mydir, "/metadata.json"), url=info$url, cache=cache, forceRemote=TRUE, overwrite=TRUE)
+    expect_identical(p, p2)
+    expect_false(identical(readLines(p), "AARON WAS HERE"))
+
+    # Or unless the cached file is out of date...
+    write(file=p, "AARON WAS HERE")
+    Sys.setFileTime(p, Sys.time() - 3601)
+    p2 <- retrieveFile(paste0(mydir, "/metadata.json"), url=info$url, cache=cache, forceRemote=TRUE)
+    expect_identical(p, p2)
+    expect_false(identical(readLines(p), "AARON WAS HERE"))
 })
 
 test_that("retrieveMetadata works as expected", {
@@ -45,6 +63,15 @@ test_that("retrieveDirectory works as expected", {
 
     # Unless we force an overwrite.
     rdir2 <- retrieveDirectory(subpath, url=info$url, cache=cache, forceRemote=TRUE, overwrite=TRUE)
+    expect_identical(rdir, rdir2)
+    expect_identical(jsonlite::fromJSON(file.path(rdir2, "metadata.json"))$meal, "lunch")
+
+    # Or unless the cached directory AND file is out of date...
+    write(file=file.path(rdir, "metadata.json"), '{ "meal": "dinner" }')
+    Sys.setFileTime(file.path(rdir, "metadata.json"), Sys.time() - 3601)
+    Sys.setFileTime(file.path(SewerRat:::local_root(cache, info$url), "SUCCESS", subpath, "....OK"), Sys.time() - 3601)
+    rdir2 <- retrieveDirectory(subpath, url=info$url, cache=cache, forceRemote=TRUE)
+    expect_identical(rdir, rdir2)
     expect_identical(jsonlite::fromJSON(file.path(rdir2, "metadata.json"))$meal, "lunch")
 
     # Trying with multiple cores.

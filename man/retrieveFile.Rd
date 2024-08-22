@@ -4,7 +4,14 @@
 \alias{retrieveFile}
 \title{Retrieve a single file}
 \usage{
-retrieveFile(path, url, cache = NULL, forceRemote = FALSE, overwrite = FALSE)
+retrieveFile(
+  path,
+  url,
+  cache = NULL,
+  forceRemote = FALSE,
+  overwrite = FALSE,
+  updateDelay = 3600
+)
 }
 \arguments{
 \item{path}{String containing the absolute path to a file in a registered directory.}
@@ -20,6 +27,10 @@ This will download \code{path} via the REST API and cache it locally,
 even if \code{path} is on the same filesystem as the caller.}
 
 \item{overwrite}{Logical scalar indicating whether to overwrite the existing cache.
+Only used for remote access.}
+
+\item{updateDelay}{Integer scalar specifying the maximum age of a cached file, in seconds.
+Older files will be automatically checked for updates.
 Only used for remote access.}
 }
 \value{

@@ -13,7 +13,10 @@
 #' even if \code{path} is on the same filesystem as the caller.
 #' @param overwrite Logical scalar indicating whether to overwrite the existing cache.
 #' Only used for remote access.
-#' @param concurrent Integer specifying the number of concurrent downloads.
+#' @param concurrent Integer scalar specifying the number of concurrent downloads.
+#' Only used for remote access.
+#' @param updateDelay Integer scalar specifying the maximum age of a cached file, in seconds.
+#' Older files will be automatically checked for updates.
 #' Only used for remote access.
 #'
 #' @return Path to the subdirectory on the caller's filesystem.
@@ -42,7 +45,7 @@
 #' 
 #' @export
 #' @import httr2
-retrieveDirectory <- function(path, url, cache=NULL, forceRemote=FALSE, overwrite=FALSE, concurrent=1) {
+retrieveDirectory <- function(path, url, cache=NULL, forceRemote=FALSE, overwrite=FALSE, concurrent=1, updateDelay=3600) {
     if (!forceRemote && file.exists(path)) {
         return(path)
     }
@@ -50,8 +53,13 @@ retrieveDirectory <- function(path, url, cache=NULL, forceRemote=FALSE, overwrit
     cache <- local_root(cache, url)
     final <- file.path(cache, "LOCAL", path)
     ok <- file.path(cache, "SUCCESS", path, "....OK")
+
     if (!overwrite && file.exists(ok) && file.exists(final)) {
-        return(final)
+        # Only check for updates every 'updateDelay' since the last check, so
+        # as to avoid excessive queries to the API.
+        if (file.info(ok)$mtime + updateDelay >= Sys.time()) {
+            return(final)
+        }
     }
 
     req <- request(paste0(url, "/list?path=", URLencode(path), "&recursive=true"))
@@ -60,11 +68,11 @@ retrieveDirectory <- function(path, url, cache=NULL, forceRemote=FALSE, overwrit
     listing <- resp_body_json(res)
 
     if (concurrent == 1L) {
-        lapply(listing, acquire_file, cache=cache, path=path, url=url, overwrite=overwrite)
+        lapply(listing, acquire_file, cache=cache, path=path, url=url, overwrite=overwrite, updateDelay=updateDelay)
     } else {
         cl <- parallel::makeCluster(concurrent)
         on.exit(parallel::stopCluster(cl), add=TRUE, after=FALSE)
-        parallel::parLapply(cl, listing, acquire_file, cache=cache, path=path, url=url, overwrite=overwrite)
+        parallel::parLapply(cl, listing, acquire_file, cache=cache, path=path, url=url, overwrite=overwrite, updateDelay=updateDelay)
     }
 
     # We use a directory-level OK file to avoid having to scan through all 
@@ -74,17 +82,55 @@ retrieveDirectory <- function(path, url, cache=NULL, forceRemote=FALSE, overwrit
     final
 }
 
+full_file_url <- function(url, path) {
+    paste0(url, "/retrieve/file?path=", URLencode(path, reserved=TRUE))
+}
+
+get_remote_last_modified <- function(url, path) {
+    req <- request(full_file_url(url, path))
+    req <- req_method(req, "HEAD")
+    req <- handle_error(req)
+    res <- req_perform(req)
+    remote_mod <- resp_header(res, "last-modified")
+
+    if (is.null(remote_mod)) {
+        warning("failed to find 'last-modified' header from the SewerRat API")
+        return(NULL)
+    }
+
+    remote_mod <- as.POSIXct(remote_mod, format="%a, %d %b %Y %H:%M:%S", tz="GMT")
+    if (is.na(remote_mod)) {
+        warning("invalid 'last-modified' header from the SewerRat API")
+        return(NULL)
+    }
+
+    return(remote_mod) 
+}
+
+#' @import httr2 
 #' @importFrom utils download.file
-acquire_file_raw <- function(cache, path, url, overwrite) {
+acquire_file_raw <- function(cache, path, url, overwrite, updateDelay) {
     target <- file.path(cache, "LOCAL", path)
 
-    if (overwrite || !file.exists(target)) {
+    if (!file.exists(target)) {
+        overwrite <- TRUE
+    } else if (!overwrite) {
+        last_mod <- file.info(target)$mtime
+        if (last_mod + updateDelay < Sys.time()) { # only check older files for updates, to avoid excessive queries.
+            remote_mod <- get_remote_last_modified(url, path)
+            if (!is.null(remote_mod) && remote_mod > last_mod) {
+                overwrite <- TRUE
+            }
+        }
+    }
+
+    if (overwrite) {
         tempdir <- file.path(cache, "TEMP")
         dir.create(tempdir, recursive=TRUE, showWarnings=FALSE)
         tempf <- tempfile(tmpdir=tempdir)
         on.exit(unlink(tempf), add=TRUE, after=FALSE)
 
-        if (download.file(paste0(url, "/retrieve/file?path=", URLencode(path, reserved=TRUE)), tempf)) {
+        if (download.file(full_file_url(url, path), tempf)) {
             stop("failed to download '", path, "'")
         }
         dir.create(dirname(target), recursive=TRUE, showWarnings=FALSE)
@@ -94,8 +140,8 @@ acquire_file_raw <- function(cache, path, url, overwrite) {
     target
 }
 
-acquire_file <- function(cache, path, name, url, overwrite) {
-    acquire_file_raw(cache, paste0(path, "/", name), url, overwrite)
+acquire_file <- function(cache, path, name, url, overwrite, updateDelay) {
+    acquire_file_raw(cache, paste0(path, "/", name), url, overwrite, updateDelay)
 }
 
 #' @importFrom utils URLencode

@@ -32,11 +32,11 @@
 #' retrieveFile(paste0(mydir, "/diet/bar"), url=info$url, forceRemote=TRUE)
 #' 
 #' @export
-retrieveFile <- function(path, url, cache=NULL, forceRemote=FALSE, overwrite=FALSE) {
+retrieveFile <- function(path, url, cache=NULL, forceRemote=FALSE, overwrite=FALSE, updateDelay=3600) {
     if (!forceRemote && file.exists(path)) {
         path
     } else {
         cache <- local_root(cache, url)
-        acquire_file_raw(cache, path, url=url, overwrite=overwrite)
+        acquire_file_raw(cache, path, url=url, overwrite=overwrite, updateDelay=updateDelay)
     }
 }

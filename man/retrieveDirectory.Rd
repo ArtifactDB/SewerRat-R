@@ -10,7 +10,8 @@ retrieveDirectory(
   cache = NULL,
   forceRemote = FALSE,
   overwrite = FALSE,
-  concurrent = 1
+  concurrent = 1,
+  updateDelay = 3600
 )
 }
 \arguments{
@@ -29,7 +30,11 @@ even if \code{path} is on the same filesystem as the caller.}
 \item{overwrite}{Logical scalar indicating whether to overwrite the existing cache.
 Only used for remote access.}
 
-\item{concurrent}{Integer specifying the number of concurrent downloads.
+\item{concurrent}{Integer scalar specifying the number of concurrent downloads.
+Only used for remote access.}
+
+\item{updateDelay}{Integer scalar specifying the maximum age of a cached file, in seconds.
+Older files will be automatically checked for updates.
 Only used for remote access.}
 }
 \value{
