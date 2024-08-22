@@ -18,7 +18,7 @@ possibly creating a local copy of the directory's contents if the caller is not 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">SewerRat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.7</span>
       </span>
     </div>
 
@@ -62,7 +62,8 @@ possibly creating a local copy of the directory's contents if the caller is not 
 <span>  cache <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  forceRemote <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  concurrent <span class="op">=</span> <span class="fl">1</span></span>
+<span>  concurrent <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  updateDelay <span class="op">=</span> <span class="fl">3600</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -96,7 +97,13 @@ Only used for remote access.</p></dd>
 
 
 <dt id="arg-concurrent">concurrent<a class="anchor" aria-label="anchor" href="#arg-concurrent"></a></dt>
-<dd><p>Integer specifying the number of concurrent downloads.
+<dd><p>Integer scalar specifying the number of concurrent downloads.
+Only used for remote access.</p></dd>
+
+
+<dt id="arg-updatedelay">updateDelay<a class="anchor" aria-label="anchor" href="#arg-updatedelay"></a></dt>
+<dd><p>Integer scalar specifying the maximum age of a cached file, in seconds.
+Older files will be automatically checked for updates.
 Only used for remote access.</p></dd>
 
 </dl></div>
@@ -128,9 +135,9 @@ or a path to a local cache of the directory's contents otherwise.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Fetching it, either directly or via the API.</span></span></span>
 <span class="r-in"><span><span class="fu">retrieveDirectory</span><span class="op">(</span><span class="va">mydir</span>, url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpFnEH8A/file216779f6288"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpDCFsTf/file24c38250e50"</span>
 <span class="r-in"><span><span class="fu">retrieveDirectory</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">mydir</span>, <span class="st">"/diet"</span><span class="op">)</span>, url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span>, forceRemote<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/github/home/.local/share/R/SewerRat/http%3A%2F%2F0.0.0.0%3A5114/LOCAL//tmp/RtmpFnEH8A/file216779f6288/diet"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/github/home/.local/share/R/SewerRat/http%3A%2F%2F0.0.0.0%3A5114/LOCAL//tmp/RtmpDCFsTf/file24c38250e50/diet"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
