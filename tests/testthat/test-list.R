@@ -23,4 +23,25 @@ test_that("listing works as expected", {
     expect_identical(sort(listFiles(mydir, url=info$url, forceRemote=TRUE)), sort(c("diet/metadata.json", "metadata.json")))
 })
 
+test_that("listRegisteredDirectories works as expected", {
+    all <- listRegisteredDirectories(info$url)
+    expect_true(length(all) > 0L)
+
+    found <- FALSE
+    for (x in all) {
+        if (x$path == mydir) {
+            found <- TRUE
+            expect_identical(x$names, list("metadata.json"))
+        }
+    }
+    expect_true(found)
+
+    # Forcing filtering.
+    filtered <- listRegisteredDirectories(info$url, user=TRUE)
+    expect_identical(all, filtered)
+
+    filtered <- listRegisteredDirectories(info$url, user=paste0(all[[1]]$user, "asdasdasdasdasd"))
+    expect_identical(length(filtered), 0L)
+})
+
 deregister(mydir, url=info$url)

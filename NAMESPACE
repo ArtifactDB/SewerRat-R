@@ -2,6 +2,7 @@
 
 export(deregister)
 export(listFiles)
+export(listRegisteredDirectories)
 export(query)
 export(register)
 export(retrieveDirectory)
