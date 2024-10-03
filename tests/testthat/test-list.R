@@ -29,7 +29,7 @@ test_that("listRegisteredDirectories works as expected", {
 
     found <- FALSE
     for (x in all) {
-        if (x$path == mydir) {
+        if (normalizePath(x$path) == normalizePath(mydir)) {
             found <- TRUE
             expect_identical(x$names, list("metadata.json"))
         }
