@@ -2,9 +2,12 @@
 % Please edit documentation in R/query.R
 \name{query}
 \alias{query}
+\alias{formatQueryResults}
 \title{Query metadata}
 \usage{
 query(text, user, path, from, until, url, number = 100)
+
+formatQueryResults(results)
 }
 \arguments{
 \item{text}{String containing a free-text query, see below for details.
@@ -25,6 +28,8 @@ If missing, no filtering is applied to remove new files.}
 \item{url}{String containing the URL to the SewerRat REST API.}
 
 \item{number}{Integer specifying the maximum number of results to return.}
+
+\item{results}{List containing the output of \code{query}.}
 }
 \value{
 List of lists where each inner list corresponds to a metadata file and contains:
@@ -34,6 +39,10 @@ List of lists where each inner list corresponds to a metadata file and contains:
 \item \code{time}, the Unix time of most recent file modification.
 \item \code{metadata}, a list representing the JSON contents of the file.
 }
+
+For \code{formatQueryResults}, a data frame containing \code{path}, \code{user}, \code{time} and \code{metadata}.
+Each row corresponds to one of the search results in \code{results}.
+Each \code{time} is now a \link{POSIXct} object.
 }
 \description{
 Query the metadata in the SewerRat backend based on free text, the owner, creation time, etc.
@@ -88,6 +97,9 @@ query("meal:bar\%", url=info$url)
 query(path="diet/", url=info$url) # has 'diet/' in the path
 query(user=Sys.info()["user"], url=info$url) # created by the current user
 query(from=Sys.time() - 60, url=info$url) # no more than 1 minute old
+
+q <- query("lun\%", url=info$url)
+formatQueryResults(q)
 }
 \author{
 Aaron Lun

@@ -15,6 +15,7 @@
 #' If missing, no filtering is applied to remove new files.
 #' @param number Integer specifying the maximum number of results to return.
 #' @param url String containing the URL to the SewerRat REST API.
+#' @param results List containing the output of \code{query}.
 #'
 #' @return List of lists where each inner list corresponds to a metadata file and contains:
 #' \itemize{
@@ -23,6 +24,10 @@
 #' \item \code{time}, the Unix time of most recent file modification.
 #' \item \code{metadata}, a list representing the JSON contents of the file.
 #' }
+#'
+#' For \code{formatQueryResults}, a data frame containing \code{path}, \code{user}, \code{time} and \code{metadata}.
+#' Each row corresponds to one of the search results in \code{results}.
+#' Each \code{time} is now a \link{POSIXct} object.
 #'
 #' @section Formatting the text query:
 #' For simple use cases, just enter one or more search terms, and the backend search for metadata files that match all the terms.
@@ -72,6 +77,9 @@
 #' query(path="diet/", url=info$url) # has 'diet/' in the path
 #' query(user=Sys.info()["user"], url=info$url) # created by the current user
 #' query(from=Sys.time() - 60, url=info$url) # no more than 1 minute old
+#'
+#' q <- query("lun%", url=info$url)
+#' formatQueryResults(q)
 #' @export
 #' @import httr2
 query <- function(text, user, path, from, until, url, number=100) {
@@ -125,4 +133,29 @@ query <- function(text, user, path, from, until, url, number=100) {
     }
 
     collected
+}
+
+#' @export
+#' @rdname query
+formatQueryResults <- function(results) {
+    N <- length(results)
+    all.paths <- character(N)
+    all.times <- double(N)
+    all.users <- character(N)
+    all.meta <- vector("list", N)
+
+    for (i in seq_along(results)) {
+        y <- results[[i]]
+        all.paths[i] <- y$path
+        all.times[i] <- y$time
+        all.users[i] <- y$user
+        all.meta[[i]] <- y$metadata
+    }
+
+    data.frame(
+        path=all.paths,
+        user=all.users,
+        time=as.POSIXct(all.times),
+        metadata=I(all.meta)
+    )
 }
