@@ -50,6 +50,7 @@ write(file=file.path(mydir, "stuff", "metadata.json"), '{ "food": "barramundi" }
 
 We can then easily register it with the `register()` function.
 The example below will only index metadata files inside `mydir` named `metadata.json`, though any number of base names can be supplied here.
+We can also instruct SewerRat to skip indexing of a subdirectory within `mydir` by creating a `.SewerRatignore` file inside that subdirectory.
 
 ```{r}
 library(SewerRat)
