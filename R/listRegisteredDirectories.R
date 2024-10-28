@@ -4,8 +4,12 @@
 #'
 #' @param url String containing the URL of the SewerRat REST API.
 #' @param user String containing the name of a user.
-#' If supplied, results are filtered to directories registered by this user.
+#' If not \code{NULL}, results are filtered to directories registered by this user.
 #' If \code{TRUE}, this is set to the current user.
+#' @param contains String containing an absolute path.
+#' If not \code{NULL}, results are filtered to directories that contain this path.
+#' @param prefix String containing an absolute path or a prefix thereof.
+#' If not \code{NULL}, results are filtered to directories that start with this string.
 #'
 #' @author Aaron Lun
 #'
@@ -38,15 +42,26 @@
 #' 
 #' @export
 #' @import httr2
-listRegisteredDirectories <- function(url, user=NULL) {
-    url <- paste0(url, "/registered")
-
-    if (isTRUE(user)) {
-        user <- Sys.info()["user"]
-    }
+listRegisteredDirectories <- function(url, user=NULL, contains=NULL, prefix=NULL) {
+    query <- character(0)
     if (!is.null(user) && !isFALSE(user)) {
-        url <- paste0(url, "?user=", user)
+        if (isTRUE(user)) {
+            user <- Sys.info()["user"]
+        }
+        query <- c(query, paste0("user=", user))
     }
+    if (!is.null(contains)) {
+        query <- c(query, paste0("contains_path=", URLencode(contains, reserved=TRUE)))
+    }
+    if (!is.null(prefix)) {
+        query <- c(query, paste0("path_prefix=", URLencode(prefix, reserved=TRUE)))
+    }
+
+    url <- paste0(url, "/registered")
+    if (length(query)) {
+        url <- paste0(url, "?", paste(query, collapse="&"))
+    }
+
     req <- request(url)
     req <- handle_error(req)
     res <- req_perform(req)

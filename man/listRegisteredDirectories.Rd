@@ -4,14 +4,20 @@
 \alias{listRegisteredDirectories}
 \title{List registered directories}
 \usage{
-listRegisteredDirectories(url, user = NULL)
+listRegisteredDirectories(url, user = NULL, contains = NULL, prefix = NULL)
 }
 \arguments{
 \item{url}{String containing the URL of the SewerRat REST API.}
 
 \item{user}{String containing the name of a user.
-If supplied, results are filtered to directories registered by this user.
+If not \code{NULL}, results are filtered to directories registered by this user.
 If \code{TRUE}, this is set to the current user.}
+
+\item{contains}{String containing an absolute path.
+If not \code{NULL}, results are filtered to directories that contain this path.}
+
+\item{prefix}{String containing an absolute path or a prefix thereof.
+If not \code{NULL}, results are filtered to directories that start with this string.}
 }
 \value{
 List of named lists, where each inner list corresponds to a registered directory and contains:
