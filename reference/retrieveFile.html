@@ -18,7 +18,7 @@ This will call the REST API to obtain and cache a copy of the file if the caller
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">SewerRat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.11</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.12</span>
       </span>
     </div>
 
@@ -56,14 +56,7 @@ This will call the REST API to obtain and cache a copy of the file if the caller
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">retrieveFile</span><span class="op">(</span></span>
-<span>  <span class="va">path</span>,</span>
-<span>  <span class="va">url</span>,</span>
-<span>  cache <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  forceRemote <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  updateDelay <span class="op">=</span> <span class="fl">3600</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">retrieveFile</span><span class="op">(</span><span class="va">path</span>, <span class="va">url</span>, cache <span class="op">=</span> <span class="cn">NULL</span>, forceRemote <span class="op">=</span> <span class="cn">FALSE</span>, overwrite <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -94,16 +87,15 @@ even if <code>path</code> is on the same filesystem as the caller.</p></dd>
 <dd><p>Logical scalar indicating whether to overwrite the existing cache.
 Only used for remote access.</p></dd>
 
-
-<dt id="arg-updatedelay">updateDelay<a class="anchor" aria-label="anchor" href="#arg-updatedelay"></a></dt>
-<dd><p>Integer scalar specifying the maximum age of a cached file, in seconds.
-Older files will be automatically checked for updates.
-Only used for remote access.</p></dd>
-
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>String containing the path to the file on the caller's filesystem.</p>
+    </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>During remote access, if a file in <code>path</code> has already been locally cached, <code>retrieveDirectory</code> will be automatically check the SewerRat API for updates.
+Any updates on the remote will cause the new file to be re-downloaded to the cache.</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -127,9 +119,9 @@ Only used for remote access.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Fetching it, either directly or via the API.</span></span></span>
 <span class="r-in"><span><span class="fu">retrieveFile</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">mydir</span>, <span class="st">"/foo"</span><span class="op">)</span>, url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpKLTNZ6/file2382a5dc367/foo"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpyAdxQ1/file25615c75696/foo"</span>
 <span class="r-in"><span><span class="fu">retrieveFile</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">mydir</span>, <span class="st">"/diet/bar"</span><span class="op">)</span>, url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span>, forceRemote<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/github/home/.local/share/R/SewerRat/http%3A%2F%2F0.0.0.0%3A5114/LOCAL//tmp/RtmpKLTNZ6/file2382a5dc367/diet/bar"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/github/home/.local/share/R/SewerRat/http%3A%2F%2F0.0.0.0%3A5114/LOCAL//tmp/RtmpyAdxQ1/file25615c75696/diet/bar"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
