@@ -4,14 +4,7 @@
 \alias{retrieveFile}
 \title{Retrieve a single file}
 \usage{
-retrieveFile(
-  path,
-  url,
-  cache = NULL,
-  forceRemote = FALSE,
-  overwrite = FALSE,
-  updateDelay = 3600
-)
+retrieveFile(path, url, cache = NULL, forceRemote = FALSE, overwrite = FALSE)
 }
 \arguments{
 \item{path}{String containing the absolute path to a file in a registered directory.}
@@ -28,10 +21,6 @@ even if \code{path} is on the same filesystem as the caller.}
 
 \item{overwrite}{Logical scalar indicating whether to overwrite the existing cache.
 Only used for remote access.}
-
-\item{updateDelay}{Integer scalar specifying the maximum age of a cached file, in seconds.
-Older files will be automatically checked for updates.
-Only used for remote access.}
 }
 \value{
 String containing the path to the file on the caller's filesystem.
@@ -39,6 +28,10 @@ String containing the path to the file on the caller's filesystem.
 \description{
 Retrieve the path to a single file in a registered directory. 
 This will call the REST API to obtain and cache a copy of the file if the caller is not on the same filesystem.
+}
+\details{
+During remote access, if a file in \code{path} has already been locally cached, \code{retrieveDirectory} will be automatically check the SewerRat API for updates.
+Any updates on the remote will cause the new file to be re-downloaded to the cache.
 }
 \examples{
 info <- startSewerRat()

@@ -2,7 +2,7 @@
 # library(testthat); library(SewerRat); source("test-retrieve.R")
 
 info <- startSewerRat()
-                                                                                     
+
 mydir <- tempfile()
 dir.create(mydir)
 write(file=file.path(mydir, "metadata.json"), '{ "first": "Aaron", "last": "Lun" }')
@@ -78,6 +78,35 @@ test_that("retrieveDirectory works as expected", {
     cache <- tempfile()
     rdir2 <- retrieveDirectory(mydir, url=info$url, cache=cache, forceRemote=TRUE, concurrent=2)
     expect_identical(jsonlite::fromJSON(file.path(rdir2, "diet", "metadata.json"))$meal, "lunch")
+})
+
+test_that("retrieveDirectory works with remote updates", {
+    mydir2 <- tempfile()
+    dir.create(mydir2)
+    write(file=file.path(mydir2, "metadata.json"), '{ "first": "Kanon", "last": "Shibuya" }')
+    dir.create(file.path(mydir2, "2"))
+    write(file=file.path(mydir2, "2", "metadata.json"), '{ "first": "Kinako", "last": "Sakurakouji" }')
+    dir.create(file.path(mydir2, "3"))
+    write(file=file.path(mydir2, "3", "metadata.json"), '{ "first": "Margarete", "last": "Wien" }')
+
+    register(mydir2, "metadata.json", url=info$url)
+    on.exit(deregister(mydir2, url=info$url))
+
+    cache <- tempfile()
+    dir <- retrieveDirectory(mydir2, url=info$url, cache=cache, forceRemote=TRUE)
+    expect_identical(jsonlite::fromJSON(file.path(dir, "2", "metadata.json"))$first, "Kinako")
+    expect_true(file.exists(file.path(dir, "3", "metadata.json")))
+
+    # Checking if it responds correctly to remote updates.
+    Sys.sleep(1.5)
+    unlink(file.path(mydir2, "3"), recursive=TRUE)
+    write(file=file.path(mydir2, "2", "metadata.json"), '{ "first": "Mei", "last": "Yoneme" }')
+    Sys.sleep(1.5)
+
+    dir2 <- retrieveDirectory(mydir2, url=info$url, cache=cache, forceRemote=TRUE, updateDelay=0)
+    expect_identical(dir, dir2)
+    expect_identical(jsonlite::fromJSON(file.path(dir, "2", "metadata.json"))$first, "Mei")
+    expect_false(file.exists(file.path(dir, "3", "metadata.json")))
 })
 
 deregister(mydir, url=info$url)

@@ -10,6 +10,10 @@
 #' @inheritParams retrieveDirectory
 #'
 #' @author Aaron Lun
+#'
+#' @details
+#' During remote access, if a file in \code{path} has already been locally cached, \code{retrieveDirectory} will be automatically check the SewerRat API for updates.
+#' Any updates on the remote will cause the new file to be re-downloaded to the cache.
 #' 
 #' @return String containing the path to the file on the caller's filesystem.
 #' 
@@ -32,11 +36,11 @@
 #' retrieveFile(paste0(mydir, "/diet/bar"), url=info$url, forceRemote=TRUE)
 #' 
 #' @export
-retrieveFile <- function(path, url, cache=NULL, forceRemote=FALSE, overwrite=FALSE, updateDelay=3600) {
+retrieveFile <- function(path, url, cache=NULL, forceRemote=FALSE, overwrite=FALSE) {
     if (!forceRemote && file.exists(path)) {
         path
     } else {
         cache <- local_root(cache, url)
-        acquire_file_raw(cache, path, url=url, overwrite=overwrite, updateDelay=updateDelay)
+        acquire_file_raw(cache, path, url=url, overwrite=overwrite)
     }
 }

@@ -38,7 +38,7 @@
 #' @import httr2
 listFiles <- function(path, url, forceRemote=FALSE) {
     if (!forceRemote && file.exists(path)) {
-        list.files(path, recursive=TRUE, all.files=TRUE)
+        .quick_list(path)
     } else {
         req <- request(paste0(url, "/list?path=", URLencode(path, reserved=TRUE), "&recursive=true"))
         req <- handle_error(req)
@@ -46,3 +46,5 @@ listFiles <- function(path, url, forceRemote=FALSE) {
         unlist(resp_body_json(res))
     }
 }
+
+.quick_list <- function(path) list.files(path, recursive=TRUE, all.files=TRUE)

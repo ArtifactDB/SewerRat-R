@@ -33,8 +33,7 @@ Only used for remote access.}
 \item{concurrent}{Integer scalar specifying the number of concurrent downloads.
 Only used for remote access.}
 
-\item{updateDelay}{Integer scalar specifying the maximum age of a cached file, in seconds.
-Older files will be automatically checked for updates.
+\item{updateDelay}{Integer scalar specifying the interval before checking for updates in a cached directory, in seconds.
 Only used for remote access.}
 }
 \value{
@@ -45,6 +44,16 @@ or a path to a local cache of the directory's contents otherwise.
 \description{
 Retrieve the path to a registered directory (or its subdirectories), 
 possibly creating a local copy of the directory's contents if the caller is not on the same filesystem.
+}
+\details{
+During remote access, this function exhibits the following behavior:
+\itemize{
+\item It will only check for updates to the directory contents after \code{updateDelay} seconds have passed since the previous check.
+This avoids unnecessarily frequent requests to the SewerRat API.
+\item If a file in \code{path} has already been locally cached, \code{retrieveDirectory} will be automatically check the SewerRat API for updates.
+Any updates on the remote will cause the new file to be re-downloaded to the cache.
+\item Any cached files that are no longer in the remote \code{path} will be deleted from the cache.
+}
 }
 \examples{
 info <- startSewerRat()
