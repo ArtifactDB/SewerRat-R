@@ -66,9 +66,9 @@ This function does not require filesystem access and can be executed remotely.
 
 ```{r}
 lapply(query("foo", url=info$url), function(x) x$path)
-lapply(query("bar%", url=info$url), function(x) x$path) # partial match to 'bar...'
-lapply(query("bar% AND foo", url=info$url), function(x) x$path) # boolean operations
-lapply(query("food:bar%", url=info$url), function(x) x$path) # match in the 'food' field
+lapply(query("bar*", url=info$url), function(x) x$path) # partial match to 'bar...'
+lapply(query("bar* AND foo", url=info$url), function(x) x$path) # boolean operations
+lapply(query("food:bar*", url=info$url), function(x) x$path) # match in the 'food' field
 ```
 
 We can also search on the user, path components, and time of creation:

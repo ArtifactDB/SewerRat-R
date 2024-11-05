@@ -15,10 +15,10 @@ write(file=file.path(mydir, "diet", "metadata.json"),
 register(mydir, "metadata.json", url=info$url)
 
 test_that("formatQueryResults works properly", {
-    q <- query("lun%", url=info$url)
+    q <- query("lun*", url=info$url)
     res <- formatQueryResults(q)
 
-    expect_gt(nrow(res), 0L)
+    expect_gte(nrow(res), 2L)
     expect_identical(nrow(res), length(q))
     expect_equal(as.double(res$time), vapply(q, function(y) y$time, 0))
     expect_identical(res$metadata[[1]], q[[1]]$metadata)
