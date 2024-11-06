@@ -18,7 +18,7 @@ This will call the REST API if the caller is not on the same filesystem."><!-- m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">SewerRat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1</span>
       </span>
     </div>
 
@@ -56,7 +56,7 @@ This will call the REST API if the caller is not on the same filesystem.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">listFiles</span><span class="op">(</span><span class="va">path</span>, <span class="va">url</span>, forceRemote <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">listFiles</span><span class="op">(</span><span class="va">path</span>, <span class="va">url</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, forceRemote <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -69,6 +69,10 @@ This will call the REST API if the caller is not on the same filesystem.</p>
 
 <dt id="arg-url">url<a class="anchor" aria-label="anchor" href="#arg-url"></a></dt>
 <dd><p>String containing the URL of the SewerRat REST API.</p></dd>
+
+
+<dt id="arg-recursive">recursive<a class="anchor" aria-label="anchor" href="#arg-recursive"></a></dt>
+<dd><p>Logical scalar indicating whether to list files recursively.</p></dd>
 
 
 <dt id="arg-forceremote">forceRemote<a class="anchor" aria-label="anchor" href="#arg-forceremote"></a></dt>
