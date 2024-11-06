@@ -5,6 +5,7 @@
 #'
 #' @param path String containing the path to the registered (sub)directory.
 #' @param url String containing the URL of the SewerRat REST API.
+#' @param recursive Logical scalar indicating whether to list files recursively.
 #' @param forceRemote Logical scalar indicating whether to force remote access,
 #' even if \code{path} is on the same filesystem as the caller.
 #'
@@ -36,15 +37,21 @@
 #' 
 #' @export
 #' @import httr2
-listFiles <- function(path, url, forceRemote=FALSE) {
+listFiles <- function(path, url, recursive=TRUE, forceRemote=FALSE) {
     if (!forceRemote && file.exists(path)) {
-        .quick_list(path)
+        if (recursive) {
+            list.files(path, recursive=TRUE, all.files=TRUE)
+        } else {
+            current <- list.files(path, all.files=TRUE, no..=TRUE)
+            dirs <- list.dirs(path, recursive=TRUE, full.names=FALSE)
+            is.dir <- current %in% dirs
+            current[is.dir] <- paste0(current[is.dir], "/")
+            current
+        }
     } else {
-        req <- request(paste0(url, "/list?path=", URLencode(path, reserved=TRUE), "&recursive=true"))
+        req <- request(paste0(url, "/list?path=", URLencode(path, reserved=TRUE), "&recursive=", if (recursive) "true" else "false"))
         req <- handle_error(req)
         res <- req_perform(req)
         unlist(resp_body_json(res))
     }
 }
-
-.quick_list <- function(path) list.files(path, recursive=TRUE, all.files=TRUE)

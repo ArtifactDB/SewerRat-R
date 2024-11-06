@@ -77,7 +77,7 @@ retrieveDirectory <- function(path, url, cache=NULL, forceRemote=FALSE, overwrit
     listing <- resp_body_json(res)
 
     # Removing files that no longer exist.
-    existing <- .quick_list(final)
+    existing <- list.files(final, recursive=TRUE, all.files=TRUE)
     unlink(file.path(final, setdiff(existing, listing)))
 
     if (concurrent == 1L) {

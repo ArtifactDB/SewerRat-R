@@ -18,9 +18,11 @@ register(mydir, "metadata.json", url=info$url)
 test_that("listing works as expected", {
     expect_identical(sort(listFiles(mydir, url=info$url)), sort(c("diet/metadata.json", "metadata.json")))
     expect_identical(sort(listFiles(paste0(mydir, "/diet"), url=info$url)), "metadata.json")
+    expect_identical(sort(listFiles(mydir, url=info$url, recursive=FALSE)), sort(c("diet/", "metadata.json")))
 
     # Forcing remote access.
     expect_identical(sort(listFiles(mydir, url=info$url, forceRemote=TRUE)), sort(c("diet/metadata.json", "metadata.json")))
+    expect_identical(sort(listFiles(mydir, url=info$url, forceRemote=TRUE, recursive=FALSE)), sort(c("diet/", "metadata.json")))
 })
 
 test_that("listRegisteredDirectories works as expected", {

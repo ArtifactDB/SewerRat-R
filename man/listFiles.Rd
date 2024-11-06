@@ -4,12 +4,14 @@
 \alias{listFiles}
 \title{List files in a registered directory}
 \usage{
-listFiles(path, url, forceRemote = FALSE)
+listFiles(path, url, recursive = TRUE, forceRemote = FALSE)
 }
 \arguments{
 \item{path}{String containing the path to the registered (sub)directory.}
 
 \item{url}{String containing the URL of the SewerRat REST API.}
+
+\item{recursive}{Logical scalar indicating whether to list files recursively.}
 
 \item{forceRemote}{Logical scalar indicating whether to force remote access,
 even if \code{path} is on the same filesystem as the caller.}
