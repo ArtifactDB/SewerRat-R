@@ -5,7 +5,16 @@
 \alias{formatQueryResults}
 \title{Query metadata}
 \usage{
-query(text, user, path, from, until, url, number = 100)
+query(
+  text,
+  user,
+  path,
+  from,
+  until,
+  url,
+  number = 100,
+  on.truncation = c("message", "warning", "none")
+)
 
 formatQueryResults(results)
 }
@@ -28,6 +37,9 @@ If missing, no filtering is applied to remove new files.}
 \item{url}{String containing the URL to the SewerRat REST API.}
 
 \item{number}{Integer specifying the maximum number of results to return.}
+
+\item{on.truncation}{String specifying what to do when the number of results exceeds \code{number}.
+Either \code{"warning"}, \code{"message"}, or \code{"none"}.}
 
 \item{results}{List containing the output of \code{query}.}
 }

@@ -14,6 +14,22 @@ write(file=file.path(mydir, "diet", "metadata.json"),
 # Registering it:
 register(mydir, "metadata.json", url=info$url)
 
+test_that("query works as expected", {
+    q <- query("lun*", url=info$url)
+    expect_gte(length(q), 2L)
+})
+
+test_that("query works with truncation", {
+    expect_message(q <- query("lun*", url=info$url, number=0), "truncated")
+    expect_identical(length(q), 0L)
+
+    expect_warning(q <- query("lun*", url=info$url, number=0, on.truncation="warning"), "truncated")
+    expect_identical(length(q), 0L)
+
+    expect_warning(q <- query("lun*", url=info$url, number=0, on.truncation="none"), NA)
+    expect_identical(length(q), 0L)
+})
+
 test_that("formatQueryResults works properly", {
     q <- query("lun*", url=info$url)
     res <- formatQueryResults(q)

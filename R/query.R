@@ -14,6 +14,8 @@
 #' @param until A \link{POSIXt} object to filter out newer files, i.e., only files older than \code{until} will be retained.
 #' If missing, no filtering is applied to remove new files.
 #' @param number Integer specifying the maximum number of results to return.
+#' @param on.truncation String specifying what to do when the number of results exceeds \code{number}.
+#' Either \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @param url String containing the URL to the SewerRat REST API.
 #' @param results List containing the output of \code{query}.
 #'
@@ -83,7 +85,8 @@
 #' formatQueryResults(q)
 #' @export
 #' @import httr2
-query <- function(text, user, path, from, until, url, number=100) {
+#' @importFrom utils head
+query <- function(text, user, path, from, until, url, number=100, on.truncation=c("message", "warning", "none")) {
     conditions <- list()
 
     if (!missing(text)) {
@@ -114,7 +117,13 @@ query <- function(text, user, path, from, until, url, number=100) {
         stop("at least one search filter must be present")
     }
 
-    stub <- paste0("/query?translate=true&limit=", number)
+    on.truncation <- match.arg(on.truncation)
+    if (on.truncation != "none") {
+        original.number <- number
+        number <- number + 1L
+    }
+
+    stub <- paste0("/query?translate=true")
     collected <- list()
 
     while (length(collected) < number) {
@@ -130,6 +139,18 @@ query <- function(text, user, path, from, until, url, number=100) {
         stub <- payload$`next`
         if (is.null(stub)) {
             break
+        }
+    }
+
+    if (on.truncation != "none") {
+        if (original.number < length(collected)) {
+            msg <- sprintf("truncated query results to the first %i matches", original.number)
+            if (on.truncation == "warning") {
+                warning(msg)
+            } else {
+                message(msg)
+            }
+            collected <- head(collected, original.number)
         }
     }
 
