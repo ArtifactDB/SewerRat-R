@@ -1,14 +1,11 @@
-# Test the retrieval functions.
-# library(testthat); library(SewerRat); source("test-retrieve.R")
+# library(testthat); library(SewerRat); source("setup.R"); source("test-retrieve.R")
 
-info <- startSewerRat()
+(function(){
 
-mydir <- tempfile()
-dir.create(mydir)
-write(file=file.path(mydir, "metadata.json"), '{ "first": "Aaron", "last": "Lun" }')
-dir.create(file.path(mydir, "diet"))
-write(file=file.path(mydir, "diet", "metadata.json"), '{ "meal": "lunch", "ingredients": "water" }')
-register(mydir, "metadata.json", url=info$url)
+config <- basic_config()
+info <- config$info
+mydir <- config$mydir
+on.exit(deregister(mydir, url=info$url), add=TRUE, after=FALSE)
 
 test_that("retrieveFile works as expected", {
     p <- retrieveFile(paste0(mydir, "/metadata.json"), url=info$url)
@@ -109,4 +106,4 @@ test_that("retrieveDirectory works with remote updates", {
     expect_false(file.exists(file.path(dir, "3", "metadata.json")))
 })
 
-deregister(mydir, url=info$url)
+})()

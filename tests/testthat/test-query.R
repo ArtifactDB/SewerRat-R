@@ -1,25 +1,21 @@
-# library(testthat); library(SewerRat); source("test-query.R")
+# library(testthat); library(SewerRat); source("setup.R"); source("test-query.R")
 
-# Starting up an example SewerRat service:
-info <- startSewerRat()
+(function(){
 
-# Mocking up a directory of stuff to query.
-mydir <- tempfile()
-dir.create(mydir)
-write(file=file.path(mydir, "metadata.json"), '{ "first": "Aaron", "last": "Lun" }')
-dir.create(file.path(mydir, "diet"))
-write(file=file.path(mydir, "diet", "metadata.json"), 
-   '{ "meal": "lunch", "ingredients": "water" }')
+config <- basic_config()
+info <- config$info
+mydir <- config$mydir
+on.exit(deregister(mydir, url=info$url), add=TRUE, after=FALSE)
 
-# Registering it:
-register(mydir, "metadata.json", url=info$url)
+test_that("basic queries work", {
+    q <- query("aaron", url=info$url)
+    expect_identical(length(q), 1L)
 
-test_that("query works as expected", {
     q <- query("lun*", url=info$url)
-    expect_gte(length(q), 2L)
+    expect_identical(length(q), 2L)
 })
 
-test_that("query works with truncation", {
+test_that("truncated queries work", {
     expect_message(q <- query("lun*", url=info$url, number=0), "truncated")
     expect_identical(length(q), 0L)
 
@@ -30,7 +26,7 @@ test_that("query works with truncation", {
     expect_identical(length(q), 0L)
 })
 
-test_that("formatQueryResults works properly", {
+test_that("formatting of query results works properly", {
     q <- query("lun*", url=info$url)
     res <- formatQueryResults(q)
 
@@ -39,3 +35,5 @@ test_that("formatQueryResults works properly", {
     expect_equal(as.double(res$time), vapply(q, function(y) y$time, 0))
     expect_identical(res$metadata[[1]], q[[1]]$metadata)
 })
+
+})()
