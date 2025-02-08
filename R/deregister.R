@@ -10,6 +10,9 @@
 #'
 #' @return On success, the directory is deregistered and NULL is invisibly returned.
 #'
+#' If \code{block=FALSE}, the function returns before confirmation of successful deregistration from the SewerRat API.
+#' This can be useful for asynchronous processing of directories with many files. 
+#'
 #' @author Aaron Lun
 #'
 #' @examples
@@ -27,12 +30,12 @@
 #' query("bar", url=info$url)
 #' @export
 #' @import httr2
-deregister <- function(dir, url, retry=3, wait=1) {
+deregister <- function(dir, url, retry=3, wait=1, block=TRUE) {
     dir <- clean_path(dir)
 
     req <- request(paste0(url, "/deregister/start"))
     req <- req_method(req, "POST")
-    req <- req_body_json(req, list(path=dir))
+    req <- req_body_json(req, list(path=dir, block=block))
     req <- redirect_post(req)
     req <- handle_error(req)
     res <- req_perform(req)
@@ -45,7 +48,7 @@ deregister <- function(dir, url, retry=3, wait=1) {
 
         req <- request(paste0(url, "/deregister/finish"))
         req <- req_method(req, "POST")
-        req <- req_body_json(req, list(path=dir))
+        req <- req_body_json(req, list(path=dir, block=block))
         req <- redirect_post(req)
         req <- handle_error(req)
         res <- req_perform(req)

@@ -4,7 +4,7 @@
 \alias{deregister}
 \title{Deregister a directory from the index}
 \usage{
-deregister(dir, url, retry = 3, wait = 1)
+deregister(dir, url, retry = 3, wait = 1, block = TRUE)
 }
 \arguments{
 \item{dir}{String containing the path to the directory to be deregistered.
@@ -13,9 +13,14 @@ This may be a relative or absolute path.}
 \item{url}{String containing the URL to the SewerRat REST API.}
 
 \item{retry, wait}{Deprecated arguments, ignored.}
+
+\item{block}{Logical scalar indicating whether to block on successful registration.}
 }
 \value{
 On success, the directory is deregistered and NULL is invisibly returned.
+
+If \code{block=FALSE}, the function returns before confirmation of successful deregistration from the SewerRat API.
+This can be useful for asynchronous processing of directories with many files.
 }
 \description{
 Remove a directory on the shared filesystem from the search index.

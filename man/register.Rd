@@ -4,7 +4,7 @@
 \alias{register}
 \title{Register a directory for indexing}
 \usage{
-register(dir, names, url, retry = 3, wait = 1)
+register(dir, names, url, retry = 3, wait = 1, block = TRUE)
 }
 \arguments{
 \item{dir}{String containing the path to the directory to be registered.
@@ -15,10 +15,15 @@ This may be a relative or absolute path.}
 \item{url}{String containing the URL to the SewerRat REST API.}
 
 \item{retry, wait}{Deprecated arguments, ignored.}
+
+\item{block}{Logical scalar indicating whether to block on successful registration.}
 }
 \value{
 On success, the directory is registered and NULL is invisibly returned.
 A warning is raised if any particular metadata file cannot be indexed.
+
+If \code{block=FALSE}, the function returns before confirmation of successful registration from the SewerRat API.
+This can be useful for asynchronous processing of directories with many files.
 }
 \description{
 Register a directory on a shared filesystem for inclusion into the search index.
