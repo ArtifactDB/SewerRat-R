@@ -36,7 +36,8 @@ If missing, no filtering is applied to remove new files.}
 
 \item{url}{String containing the URL to the SewerRat REST API.}
 
-\item{number}{Integer specifying the maximum number of results to return.}
+\item{number}{Integer specifying the maximum number of results to return.
+This can also be \code{Inf} to return all results.}
 
 \item{on.truncation}{String specifying what to do when the number of results exceeds \code{number}.
 Either \code{"warning"}, \code{"message"}, or \code{"none"}.}

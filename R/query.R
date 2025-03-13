@@ -14,6 +14,7 @@
 #' @param until A \link{POSIXt} object to filter out newer files, i.e., only files older than \code{until} will be retained.
 #' If missing, no filtering is applied to remove new files.
 #' @param number Integer specifying the maximum number of results to return.
+#' This can also be \code{Inf} to return all results.
 #' @param on.truncation String specifying what to do when the number of results exceeds \code{number}.
 #' Either \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @param url String containing the URL to the SewerRat REST API.
@@ -127,7 +128,12 @@ query <- function(text, user, path, from, until, url, number=100, on.truncation=
     collected <- list()
 
     while (length(collected) < number) {
-        req <- request(paste0(url, paste0(stub, "&limit=", number - length(collected))))
+        current.url <- paste0(url, stub)
+        if (!is.infinite(number)) {
+            current.url <- paste0(current.url, "&limit=", number - length(collected))
+        }
+
+        req <- request(current.url)
         req <- req_method(req, "POST")
         req <- req_body_json(req, query)
         req <- redirect_post(req)
@@ -143,7 +149,7 @@ query <- function(text, user, path, from, until, url, number=100, on.truncation=
     }
 
     if (on.truncation != "none") {
-        if (original.number < length(collected)) {
+        if (!is.infinite(original.number) && original.number < length(collected)) {
             msg <- sprintf("truncated query results to the first %i matches", original.number)
             if (on.truncation == "warning") {
                 warning(msg)

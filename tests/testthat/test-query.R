@@ -13,6 +13,9 @@ test_that("basic queries work", {
 
     q <- query("lun*", url=info$url)
     expect_identical(length(q), 2L)
+
+    expect_message(q <- query("lun*", url=info$url, number=Inf), NA) # no warnings when number=Inf.
+    expect_identical(length(q), 2L)
 })
 
 test_that("truncated queries work", {
