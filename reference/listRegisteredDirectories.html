@@ -59,6 +59,7 @@
 <span>  user <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  contains <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  prefix <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  within <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  exists <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -84,7 +85,13 @@ If not <code>NULL</code>, results are filtered to directories that contain this 
 
 <dt id="arg-prefix">prefix<a class="anchor" aria-label="anchor" href="#arg-prefix"></a></dt>
 <dd><p>String containing an absolute path or a prefix thereof.
-If not <code>NULL</code>, results are filtered to directories that start with this string.</p></dd>
+If not <code>NULL</code>, results are filtered to directories that start with this string.
+This is soft-deprecated and users should prefer to use <code>within</code>.</p></dd>
+
+
+<dt id="arg-within">within<a class="anchor" aria-label="anchor" href="#arg-within"></a></dt>
+<dd><p>String containing an absolute path.
+If not <code>NULL</code>, results are filtered to directories that are equal to or lie within this path.</p></dd>
 
 
 <dt id="arg-exists">exists<a class="anchor" aria-label="anchor" href="#arg-exists"></a></dt>
@@ -124,13 +131,13 @@ If <code>FALSE</code>, only non-existent directories are reported, and if <code>
 <span class="r-in"><span><span class="fu">listRegisteredDirectories</span><span class="op">(</span>url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpM84DXu/file41d35ab14b7"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cc4e65ef80"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742488880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505609</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$names</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$names[[1]]</span>
@@ -140,13 +147,13 @@ If <code>FALSE</code>, only non-existent directories are reported, and if <code>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpM84DXu/file41d408f77d0"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce40c885"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742488880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$names</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$names[[1]]</span>
@@ -157,13 +164,13 @@ If <code>FALSE</code>, only non-existent directories are reported, and if <code>
 <span class="r-in"><span><span class="fu">listRegisteredDirectories</span><span class="op">(</span>url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span>, user<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpM84DXu/file41d35ab14b7"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cc4e65ef80"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742488880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505609</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$names</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$names[[1]]</span>
@@ -173,13 +180,13 @@ If <code>FALSE</code>, only non-existent directories are reported, and if <code>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpM84DXu/file41d408f77d0"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce40c885"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742488880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$names</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$names[[1]]</span>
