@@ -10,6 +10,8 @@
 #' If not \code{NULL}, results are filtered to directories that contain this path.
 #' @param prefix String containing an absolute path or a prefix thereof.
 #' If not \code{NULL}, results are filtered to directories that start with this string.
+#' @param exists Logical scalar indicating whether to only report directories that exist on the filesystem.
+#' If \code{FALSE}, only non-existent directories are reported, and if \code{NULL}, no filtering is applied based on existence.
 #'
 #' @author Aaron Lun
 #'
@@ -42,7 +44,7 @@
 #' 
 #' @export
 #' @import httr2
-listRegisteredDirectories <- function(url, user=NULL, contains=NULL, prefix=NULL) {
+listRegisteredDirectories <- function(url, user=NULL, contains=NULL, prefix=NULL, exists=NULL) {
     query <- character(0)
     if (!is.null(user) && !isFALSE(user)) {
         if (isTRUE(user)) {
@@ -55,6 +57,9 @@ listRegisteredDirectories <- function(url, user=NULL, contains=NULL, prefix=NULL
     }
     if (!is.null(prefix)) {
         query <- c(query, paste0("path_prefix=", URLencode(prefix, reserved=TRUE)))
+    }
+    if (!is.null(exists)) {
+        query <- c(query, paste0("exists=", tolower(exists)))
     }
 
     url <- paste0(url, "/registered")

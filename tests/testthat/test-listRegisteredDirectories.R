@@ -44,6 +44,19 @@ test_that("listRegisteredDirectories works as expected", {
     # Multiple filters work.
     filtered <- listRegisteredDirectories(info$url, prefix=dirname(mydir), user=TRUE, contains=file.path(mydir, "diet"))
     expect_identical(all, filtered)
-})
 
+    # Existence filter works.
+    tmp <- tempfile()
+    dir.create(tmp)
+    register(tmp, names="metadata.json", url=info$url)
+    on.exit(deregister(tmp, url=info$url), add=TRUE, after=FALSE)
+    filtered <- listRegisteredDirectories(info$url, prefix=tmp, exists=TRUE)
+    expect_identical(normalizePath(filtered[[1]]$path), normalizePath(tmp))
+
+    unlink(tmp, recursive=TRUE)
+    filtered2 <- listRegisteredDirectories(info$url, prefix=tmp, exists=FALSE)
+    expect_identical(filtered, filtered2)
+    filtered <- listRegisteredDirectories(info$url, prefix=tmp, exists=TRUE)
+    expect_identical(length(filtered), 0L)
+})
 })()

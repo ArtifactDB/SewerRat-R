@@ -4,7 +4,13 @@
 \alias{listRegisteredDirectories}
 \title{List registered directories}
 \usage{
-listRegisteredDirectories(url, user = NULL, contains = NULL, prefix = NULL)
+listRegisteredDirectories(
+  url,
+  user = NULL,
+  contains = NULL,
+  prefix = NULL,
+  exists = NULL
+)
 }
 \arguments{
 \item{url}{String containing the URL of the SewerRat REST API.}
@@ -18,6 +24,9 @@ If not \code{NULL}, results are filtered to directories that contain this path.}
 
 \item{prefix}{String containing an absolute path or a prefix thereof.
 If not \code{NULL}, results are filtered to directories that start with this string.}
+
+\item{exists}{Logical scalar indicating whether to only report directories that exist on the filesystem.
+If \code{FALSE}, only non-existent directories are reported, and if \code{NULL}, no filtering is applied based on existence.}
 }
 \value{
 List of named lists, where each inner list corresponds to a registered directory and contains:
