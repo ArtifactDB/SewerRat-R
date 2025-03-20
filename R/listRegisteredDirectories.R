@@ -8,8 +8,11 @@
 #' If \code{TRUE}, this is set to the current user.
 #' @param contains String containing an absolute path.
 #' If not \code{NULL}, results are filtered to directories that contain this path.
+#' @param within String containing an absolute path.
+#' If not \code{NULL}, results are filtered to directories that are equal to or lie within this path.
 #' @param prefix String containing an absolute path or a prefix thereof.
 #' If not \code{NULL}, results are filtered to directories that start with this string.
+#' This is soft-deprecated and users should prefer to use \code{within}.
 #' @param exists Logical scalar indicating whether to only report directories that exist on the filesystem.
 #' If \code{FALSE}, only non-existent directories are reported, and if \code{NULL}, no filtering is applied based on existence.
 #'
@@ -44,7 +47,7 @@
 #' 
 #' @export
 #' @import httr2
-listRegisteredDirectories <- function(url, user=NULL, contains=NULL, prefix=NULL, exists=NULL) {
+listRegisteredDirectories <- function(url, user=NULL, contains=NULL, prefix=NULL, within=NULL, exists=NULL) {
     query <- character(0)
     if (!is.null(user) && !isFALSE(user)) {
         if (isTRUE(user)) {
@@ -54,6 +57,9 @@ listRegisteredDirectories <- function(url, user=NULL, contains=NULL, prefix=NULL
     }
     if (!is.null(contains)) {
         query <- c(query, paste0("contains_path=", URLencode(contains, reserved=TRUE)))
+    }
+    if (!is.null(within)) {
+        query <- c(query, paste0("within_path=", URLencode(within, reserved=TRUE)))
     }
     if (!is.null(prefix)) {
         query <- c(query, paste0("path_prefix=", URLencode(prefix, reserved=TRUE)))

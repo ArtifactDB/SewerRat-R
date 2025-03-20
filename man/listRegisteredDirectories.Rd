@@ -9,6 +9,7 @@ listRegisteredDirectories(
   user = NULL,
   contains = NULL,
   prefix = NULL,
+  within = NULL,
   exists = NULL
 )
 }
@@ -23,7 +24,11 @@ If \code{TRUE}, this is set to the current user.}
 If not \code{NULL}, results are filtered to directories that contain this path.}
 
 \item{prefix}{String containing an absolute path or a prefix thereof.
-If not \code{NULL}, results are filtered to directories that start with this string.}
+If not \code{NULL}, results are filtered to directories that start with this string.
+This is soft-deprecated and users should prefer to use \code{within}.}
+
+\item{within}{String containing an absolute path.
+If not \code{NULL}, results are filtered to directories that are equal to or lie within this path.}
 
 \item{exists}{Logical scalar indicating whether to only report directories that exist on the filesystem.
 If \code{FALSE}, only non-existent directories are reported, and if \code{NULL}, no filtering is applied based on existence.}

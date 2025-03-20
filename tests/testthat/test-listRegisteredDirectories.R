@@ -34,15 +34,15 @@ test_that("listRegisteredDirectories works as expected", {
     filtered <- listRegisteredDirectories(info$url, contains=tempfile())
     expect_identical(length(filtered), 0L)
 
-    # Filter by prefix.
-    filtered <- listRegisteredDirectories(info$url, prefix=dirname(mydir))
+    # Filter by within.
+    filtered <- listRegisteredDirectories(info$url, within=dirname(mydir))
     expect_identical(all, filtered)
 
-    filtered <- listRegisteredDirectories(info$url, prefix=paste0(dirname(mydir), "-asdasdad"))
+    filtered <- listRegisteredDirectories(info$url, within=paste0(dirname(mydir), "-asdasdad"))
     expect_identical(length(filtered), 0L)
 
     # Multiple filters work.
-    filtered <- listRegisteredDirectories(info$url, prefix=dirname(mydir), user=TRUE, contains=file.path(mydir, "diet"))
+    filtered <- listRegisteredDirectories(info$url, within=dirname(mydir), user=TRUE, contains=file.path(mydir, "diet"))
     expect_identical(all, filtered)
 
     # Existence filter works.
@@ -50,13 +50,13 @@ test_that("listRegisteredDirectories works as expected", {
     dir.create(tmp)
     register(tmp, names="metadata.json", url=info$url)
     on.exit(deregister(tmp, url=info$url), add=TRUE, after=FALSE)
-    filtered <- listRegisteredDirectories(info$url, prefix=tmp, exists=TRUE)
+    filtered <- listRegisteredDirectories(info$url, within=tmp, exists=TRUE)
     expect_identical(normalizePath(filtered[[1]]$path), normalizePath(tmp))
 
     unlink(tmp, recursive=TRUE)
-    filtered2 <- listRegisteredDirectories(info$url, prefix=tmp, exists=FALSE)
+    filtered2 <- listRegisteredDirectories(info$url, within=tmp, exists=FALSE)
     expect_identical(filtered, filtered2)
-    filtered <- listRegisteredDirectories(info$url, prefix=tmp, exists=TRUE)
+    filtered <- listRegisteredDirectories(info$url, within=tmp, exists=TRUE)
     expect_identical(length(filtered), 0L)
 })
 })()
