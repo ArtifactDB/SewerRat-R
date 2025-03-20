@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">SewerRat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.5</span>
       </span>
     </div>
 
@@ -54,7 +54,13 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">listRegisteredDirectories</span><span class="op">(</span><span class="va">url</span>, user <span class="op">=</span> <span class="cn">NULL</span>, contains <span class="op">=</span> <span class="cn">NULL</span>, prefix <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">listRegisteredDirectories</span><span class="op">(</span></span>
+<span>  <span class="va">url</span>,</span>
+<span>  user <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  contains <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  prefix <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exists <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -79,6 +85,11 @@ If not <code>NULL</code>, results are filtered to directories that contain this 
 <dt id="arg-prefix">prefix<a class="anchor" aria-label="anchor" href="#arg-prefix"></a></dt>
 <dd><p>String containing an absolute path or a prefix thereof.
 If not <code>NULL</code>, results are filtered to directories that start with this string.</p></dd>
+
+
+<dt id="arg-exists">exists<a class="anchor" aria-label="anchor" href="#arg-exists"></a></dt>
+<dd><p>Logical scalar indicating whether to only report directories that exist on the filesystem.
+If <code>FALSE</code>, only non-existent directories are reported, and if <code>NULL</code>, no filtering is applied based on existence.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -113,13 +124,13 @@ If not <code>NULL</code>, results are filtered to directories that start with th
 <span class="r-in"><span><span class="fu">listRegisteredDirectories</span><span class="op">(</span>url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpZvO2Zf/file5158715535"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpM84DXu/file41d35ab14b7"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1741834507</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742488880</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$names</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$names[[1]]</span>
@@ -129,13 +140,13 @@ If not <code>NULL</code>, results are filtered to directories that start with th
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpZvO2Zf/file51560c279ef"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpM84DXu/file41d408f77d0"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1741834507</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742488880</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$names</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$names[[1]]</span>
@@ -146,13 +157,13 @@ If not <code>NULL</code>, results are filtered to directories that start with th
 <span class="r-in"><span><span class="fu">listRegisteredDirectories</span><span class="op">(</span>url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span>, user<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpZvO2Zf/file5158715535"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpM84DXu/file41d35ab14b7"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1741834507</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742488880</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$names</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$names[[1]]</span>
@@ -162,13 +173,13 @@ If not <code>NULL</code>, results are filtered to directories that start with th
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpZvO2Zf/file51560c279ef"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpM84DXu/file41d408f77d0"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1741834507</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742488880</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$names</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$names[[1]]</span>
