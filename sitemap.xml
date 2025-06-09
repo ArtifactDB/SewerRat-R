@@ -7,8 +7,10 @@
 <url><loc>/index.html</loc></url>
 <url><loc>/reference/deregister.html</loc></url>
 <url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/listFields.html</loc></url>
 <url><loc>/reference/listFiles.html</loc></url>
 <url><loc>/reference/listRegisteredDirectories.html</loc></url>
+<url><loc>/reference/listTokens.html</loc></url>
 <url><loc>/reference/query.html</loc></url>
 <url><loc>/reference/register.html</loc></url>
 <url><loc>/reference/retrieveDirectory.html</loc></url>

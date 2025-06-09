@@ -18,7 +18,7 @@ This function does not require access to the same filesystem as the SewerRat API
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">SewerRat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -64,6 +64,7 @@ This function does not require access to the same filesystem as the SewerRat API
 <span>  <span class="va">until</span>,</span>
 <span>  <span class="va">url</span>,</span>
 <span>  number <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  metadata <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  on.truncation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"message"</span>, <span class="st">"warning"</span>, <span class="st">"none"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -108,6 +109,11 @@ If missing, no filtering is applied to remove new files.</p></dd>
 This can also be <code>Inf</code> to return all results.</p></dd>
 
 
+<dt id="arg-metadata">metadata<a class="anchor" aria-label="anchor" href="#arg-metadata"></a></dt>
+<dd><p>Logical scalar indicating whether the metadata itself should be returned.
+This can be set to <code>FALSE</code> for better performance if only the path is of interest.</p></dd>
+
+
 <dt id="arg-on-truncation">on.truncation<a class="anchor" aria-label="anchor" href="#arg-on-truncation"></a></dt>
 <dd><p>String specifying what to do when the number of results exceeds <code>number</code>.
 Either <code>"warning"</code>, <code>"message"</code>, or <code>"none"</code>.</p></dd>
@@ -122,8 +128,9 @@ Either <code>"warning"</code>, <code>"message"</code>, or <code>"none"</code>.</
     <p>List of lists where each inner list corresponds to a metadata file and contains:</p><ul><li><p><code>path</code>, a string containing the path to the file.</p></li>
 <li><p><code>user</code>, the identity of the file owner.</p></li>
 <li><p><code>time</code>, the Unix time of most recent file modification.</p></li>
-<li><p><code>metadata</code>, a list representing the JSON contents of the file.</p></li>
-</ul><p>For <code>formatQueryResults</code>, a data frame containing <code>path</code>, <code>user</code>, <code>time</code> and <code>metadata</code>.
+<li><p><code>metadata</code>, a list representing the JSON contents of the file.
+Only present if metadata retrieval was requested via <code>metadata=TRUE</code> in the <code>query</code> call.</p></li>
+</ul><p>For <code>formatQueryResults</code>, a data frame containing <code>path</code>, <code>user</code>, <code>time</code> and (if requested) <code>metadata</code>.
 Each row corresponds to one of the search results in <code>results</code>.
 Each <code>time</code> is now a <a href="https://rdrr.io/r/base/DateTimeClasses.html" class="external-link">POSIXct</a> object.</p>
     </div>
@@ -175,13 +182,13 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-in"><span><span class="fu">query</span><span class="op">(</span><span class="st">"aaron"</span>, url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce65e31d/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea3e9a9d84/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489103</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$metadata$first</span>
@@ -194,13 +201,13 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce40c885/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea817f4a6/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$metadata$first</span>
@@ -213,13 +220,13 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cc4e65ef80/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea7aa4db3d/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata$first</span>
@@ -230,73 +237,15 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu">query</span><span class="op">(</span><span class="st">"lun*"</span>, url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span><span class="op">)</span> </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce65e31d/metadata.json"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$user</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$metadata</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$metadata$first</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Aaron"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$metadata$last</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Lun"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce65e31d/diet/metadata.json"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$user</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$metadata</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$metadata$meal</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lunch"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$metadata$ingredients</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce40c885/diet/metadata.json"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$user</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata$meal</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lunch"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata$ingredients</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce40c885/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea4952bbfe/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata$first</span>
@@ -309,13 +258,13 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cc4e65ef80/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea286c82b7/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$metadata$first</span>
@@ -326,35 +275,16 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cc4e65ef80/diet/metadata.json"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$user</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505609</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$metadata</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$metadata$meal</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lunch"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$metadata$ingredients</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu">query</span><span class="op">(</span><span class="st">"lun* AND aaron"</span>, url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">query</span><span class="op">(</span><span class="st">"lun*"</span>, url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span><span class="op">)</span> </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce65e31d/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea3e9a9d84/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489103</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$metadata$first</span>
@@ -367,13 +297,204 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce40c885/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea3e9a9d84/diet/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489103</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$metadata$meal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lunch"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$metadata$ingredients</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea817f4a6/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata$first</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Aaron"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata$last</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Lun"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea817f4a6/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata$meal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lunch"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata$ingredients</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea7aa4db3d/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$metadata$first</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Aaron"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$metadata$last</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Lun"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea7aa4db3d/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$metadata$meal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lunch"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$metadata$ingredients</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea4952bbfe/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]$metadata$first</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Aaron"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]$metadata$last</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Lun"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea4952bbfe/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]$metadata$meal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lunch"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]$metadata$ingredients</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea286c82b7/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]$metadata$meal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lunch"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]$metadata$ingredients</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea286c82b7/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]$metadata$first</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Aaron"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]$metadata$last</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Lun"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu">query</span><span class="op">(</span><span class="st">"lun* AND aaron"</span>, url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea3e9a9d84/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489103</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$metadata$first</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Aaron"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$metadata$last</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Lun"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea817f4a6/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$metadata$first</span>
@@ -386,13 +507,13 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cc4e65ef80/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea7aa4db3d/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata$first</span>
@@ -403,19 +524,57 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea4952bbfe/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata$first</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Aaron"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata$last</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Lun"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea286c82b7/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$metadata$first</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Aaron"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$metadata$last</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Lun"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">query</span><span class="op">(</span><span class="st">"meal:bar%"</span>, url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> list()</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">query</span><span class="op">(</span>path<span class="op">=</span><span class="st">"diet/"</span>, url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span><span class="op">)</span> <span class="co"># has 'diet/' in the path</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce65e31d/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea3e9a9d84/diet/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489103</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$metadata$meal</span>
@@ -428,13 +587,13 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce40c885/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea817f4a6/diet/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$metadata$meal</span>
@@ -447,19 +606,57 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cc4e65ef80/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea7aa4db3d/diet/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata$meal</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lunch"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata$ingredients</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea4952bbfe/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata$meal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lunch"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata$ingredients</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea286c82b7/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$metadata$meal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lunch"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$metadata$ingredients</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -467,13 +664,13 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-in"><span><span class="fu">query</span><span class="op">(</span>user<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.info.html" class="external-link">Sys.info</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="st">"user"</span><span class="op">]</span>, url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span><span class="op">)</span> <span class="co"># created by the current user</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce65e31d/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea3e9a9d84/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489103</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$metadata$first</span>
@@ -486,13 +683,13 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce65e31d/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea3e9a9d84/diet/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489103</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$metadata$meal</span>
@@ -505,51 +702,51 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce40c885/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea817f4a6/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata$meal</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lunch"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata$first</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Aaron"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata$ingredients</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata$last</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Lun"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce40c885/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea817f4a6/diet/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata$first</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Aaron"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata$meal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lunch"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata$last</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Lun"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata$ingredients</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cc4e65ef80/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea7aa4db3d/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$metadata$first</span>
@@ -562,13 +759,13 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cc4e65ef80/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea7aa4db3d/diet/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$metadata$meal</span>
@@ -576,19 +773,95 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$metadata$ingredients</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea4952bbfe/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]$metadata$first</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Aaron"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]$metadata$last</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Lun"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea4952bbfe/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]$metadata$meal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lunch"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]$metadata$ingredients</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea286c82b7/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]$metadata$meal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lunch"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]$metadata$ingredients</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea286c82b7/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]$metadata$first</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Aaron"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]$metadata$last</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Lun"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">query</span><span class="op">(</span>from<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">60</span>, url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span><span class="op">)</span> <span class="co"># no more than 1 minute old</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce65e31d/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea3e9a9d84/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489103</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$metadata$first</span>
@@ -601,13 +874,13 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce65e31d/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea3e9a9d84/diet/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489103</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]$metadata$meal</span>
@@ -620,51 +893,51 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce40c885/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea817f4a6/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata$meal</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lunch"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata$first</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Aaron"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata$ingredients</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]$metadata$last</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Lun"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cce40c885/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea817f4a6/diet/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata$first</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Aaron"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata$meal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lunch"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata$last</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Lun"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]$metadata$ingredients</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cc4e65ef80/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea7aa4db3d/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]$metadata$first</span>
@@ -677,13 +950,13 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpEcWR8B/file1cc4e65ef80/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea7aa4db3d/diet/metadata.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$user</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1742505609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$metadata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]$metadata$meal</span>
@@ -694,23 +967,107 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea4952bbfe/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]$metadata$first</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Aaron"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]$metadata$last</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Lun"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea4952bbfe/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]$metadata$meal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lunch"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]$metadata$ingredients</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea286c82b7/diet/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]$metadata$meal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lunch"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]$metadata$ingredients</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "water"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]$path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp4JKooK/file1ea286c82b7/metadata.json"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]$user</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "root"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]$time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1749489102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]$metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]$metadata$first</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Aaron"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]$metadata$last</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Lun"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu">query</span><span class="op">(</span><span class="st">"lun*"</span>, url<span class="op">=</span><span class="va">info</span><span class="op">$</span><span class="va">url</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">formatQueryResults</span><span class="op">(</span><span class="va">q</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                 path user                time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       /tmp/RtmpEcWR8B/file1cce65e31d/metadata.json root 2025-03-20 21:20:10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  /tmp/RtmpEcWR8B/file1cce65e31d/diet/metadata.json root 2025-03-20 21:20:10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  /tmp/RtmpEcWR8B/file1cce40c885/diet/metadata.json root 2025-03-20 21:20:10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4       /tmp/RtmpEcWR8B/file1cce40c885/metadata.json root 2025-03-20 21:20:10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5      /tmp/RtmpEcWR8B/file1cc4e65ef80/metadata.json root 2025-03-20 21:20:09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 /tmp/RtmpEcWR8B/file1cc4e65ef80/diet/metadata.json root 2025-03-20 21:20:09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       metadata</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   Aaron, Lun</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 lunch, water</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 lunch, water</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   Aaron, Lun</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   Aaron, Lun</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 lunch, water</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                  path user                time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       /tmp/Rtmp4JKooK/file1ea3e9a9d84/metadata.json root 2025-06-09 17:11:43</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  /tmp/Rtmp4JKooK/file1ea3e9a9d84/diet/metadata.json root 2025-06-09 17:11:43</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        /tmp/Rtmp4JKooK/file1ea817f4a6/metadata.json root 2025-06-09 17:11:42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   /tmp/Rtmp4JKooK/file1ea817f4a6/diet/metadata.json root 2025-06-09 17:11:42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       /tmp/Rtmp4JKooK/file1ea7aa4db3d/metadata.json root 2025-06-09 17:11:42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  /tmp/Rtmp4JKooK/file1ea7aa4db3d/diet/metadata.json root 2025-06-09 17:11:42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7       /tmp/Rtmp4JKooK/file1ea4952bbfe/metadata.json root 2025-06-09 17:11:42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  /tmp/Rtmp4JKooK/file1ea4952bbfe/diet/metadata.json root 2025-06-09 17:11:42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  /tmp/Rtmp4JKooK/file1ea286c82b7/diet/metadata.json root 2025-06-09 17:11:42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10      /tmp/Rtmp4JKooK/file1ea286c82b7/metadata.json root 2025-06-09 17:11:42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    Aaron, Lun</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  lunch, water</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    Aaron, Lun</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  lunch, water</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    Aaron, Lun</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  lunch, water</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7    Aaron, Lun</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  lunch, water</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  lunch, water</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10   Aaron, Lun</span>
 </code></pre></div>
     </div>
   </div>
@@ -725,7 +1082,7 @@ while <code>cd?</code> will match files with <code>cd4</code>, <code>cd8</code>,
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer></div>
