@@ -13,6 +13,7 @@ query(
   until,
   url,
   number = 100,
+  metadata = TRUE,
   on.truncation = c("message", "warning", "none")
 )
 
@@ -39,6 +40,9 @@ If missing, no filtering is applied to remove new files.}
 \item{number}{Integer specifying the maximum number of results to return.
 This can also be \code{Inf} to return all results.}
 
+\item{metadata}{Logical scalar indicating whether the metadata itself should be returned.
+This can be set to \code{FALSE} for better performance if only the path is of interest.}
+
 \item{on.truncation}{String specifying what to do when the number of results exceeds \code{number}.
 Either \code{"warning"}, \code{"message"}, or \code{"none"}.}
 
@@ -51,9 +55,10 @@ List of lists where each inner list corresponds to a metadata file and contains:
 \item \code{user}, the identity of the file owner.
 \item \code{time}, the Unix time of most recent file modification.
 \item \code{metadata}, a list representing the JSON contents of the file.
+Only present if metadata retrieval was requested via \code{metadata=TRUE} in the \code{query} call.
 }
 
-For \code{formatQueryResults}, a data frame containing \code{path}, \code{user}, \code{time} and \code{metadata}.
+For \code{formatQueryResults}, a data frame containing \code{path}, \code{user}, \code{time} and (if requested) \code{metadata}.
 Each row corresponds to one of the search results in \code{results}.
 Each \code{time} is now a \link{POSIXct} object.
 }

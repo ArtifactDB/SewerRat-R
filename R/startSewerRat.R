@@ -25,7 +25,7 @@
 #' startSewerRat() # initialize a new instance.
 #' 
 #' @export
-startSewerRat <- function(db=tempfile(fileext=".sqlite3"), port=NULL, wait = 1, version = "1.1.3", overwrite = FALSE) {
+startSewerRat <- function(db=tempfile(fileext=".sqlite3"), port=NULL, wait = 1, version = "1.2.0", overwrite = FALSE) {
     if (!is.null(running$active)) {
         return(list(new=FALSE, port=running$port, url=assemble_url(running$port)))
     }

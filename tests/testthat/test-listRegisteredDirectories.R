@@ -9,7 +9,7 @@ on.exit(deregister(mydir, url=info$url), add=TRUE, after=FALSE)
 
 test_that("listRegisteredDirectories works as expected", {
     all <- listRegisteredDirectories(info$url)
-    expect_true(length(all) > 0L)
+    expect_gt(length(all), 0L)
 
     found <- FALSE
     for (x in all) {
@@ -59,4 +59,19 @@ test_that("listRegisteredDirectories works as expected", {
     filtered <- listRegisteredDirectories(info$url, within=tmp, exists=TRUE)
     expect_identical(length(filtered), 0L)
 })
+
+test_that("truncated listings work", {
+    expect_message(res <- listRegisteredDirectories(info$url, number=0), "truncated")
+    expect_identical(length(res), 0L)
+
+    expect_warning(res <- listRegisteredDirectories(info$url, number=0, on.truncation="warning"), "truncated")
+    expect_identical(length(res), 0L)
+
+    expect_message(res <- listRegisteredDirectories(info$url, number=Inf, on.truncation="none"), NA)
+    expect_gt(length(res), 0L)
+
+    res <- listRegisteredDirectories(info$url, number=Inf)
+    expect_gt(length(res), 0L)
+})
+
 })()

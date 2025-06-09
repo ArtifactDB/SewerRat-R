@@ -2,8 +2,10 @@
 
 export(deregister)
 export(formatQueryResults)
+export(listFields)
 export(listFiles)
 export(listRegisteredDirectories)
+export(listTokens)
 export(query)
 export(register)
 export(retrieveDirectory)

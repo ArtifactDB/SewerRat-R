@@ -13,6 +13,8 @@
 #' If missing, no filtering is applied to remove old files.
 #' @param until A \link{POSIXt} object to filter out newer files, i.e., only files older than \code{until} will be retained.
 #' If missing, no filtering is applied to remove new files.
+#' @param metadata Logical scalar indicating whether the metadata itself should be returned.
+#' This can be set to \code{FALSE} for better performance if only the path is of interest.
 #' @param number Integer specifying the maximum number of results to return.
 #' This can also be \code{Inf} to return all results.
 #' @param on.truncation String specifying what to do when the number of results exceeds \code{number}.
@@ -26,9 +28,10 @@
 #' \item \code{user}, the identity of the file owner.
 #' \item \code{time}, the Unix time of most recent file modification.
 #' \item \code{metadata}, a list representing the JSON contents of the file.
+#' Only present if metadata retrieval was requested via \code{metadata=TRUE} in the \code{query} call.
 #' }
 #'
-#' For \code{formatQueryResults}, a data frame containing \code{path}, \code{user}, \code{time} and \code{metadata}.
+#' For \code{formatQueryResults}, a data frame containing \code{path}, \code{user}, \code{time} and (if requested) \code{metadata}.
 #' Each row corresponds to one of the search results in \code{results}.
 #' Each \code{time} is now a \link{POSIXct} object.
 #'
@@ -86,8 +89,7 @@
 #' formatQueryResults(q)
 #' @export
 #' @import httr2
-#' @importFrom utils head
-query <- function(text, user, path, from, until, url, number=100, on.truncation=c("message", "warning", "none")) {
+query <- function(text, user, path, from, until, url, number=100, metadata=TRUE, on.truncation=c("message", "warning", "none")) {
     conditions <- list()
 
     if (!missing(text)) {
@@ -119,14 +121,17 @@ query <- function(text, user, path, from, until, url, number=100, on.truncation=
     }
 
     on.truncation <- match.arg(on.truncation)
+    original.number <- number
     if (on.truncation != "none") {
-        original.number <- number
         number <- number + 1L
     }
 
     stub <- paste0("/query?translate=true")
-    collected <- list()
+    if (!metadata) {
+        stub <- paste0(stub, "&metadata=false")
+    }
 
+    collected <- list()
     while (length(collected) < number) {
         current.url <- paste0(url, stub)
         if (!is.infinite(number)) {
@@ -148,19 +153,7 @@ query <- function(text, user, path, from, until, url, number=100, on.truncation=
         }
     }
 
-    if (on.truncation != "none") {
-        if (!is.infinite(original.number) && original.number < length(collected)) {
-            msg <- sprintf("truncated query results to the first %i matches", original.number)
-            if (on.truncation == "warning") {
-                warning(msg)
-            } else {
-                message(msg)
-            }
-            collected <- head(collected, original.number)
-        }
-    }
-
-    collected
+    handle_truncated_pages(on.truncation, original.number, collected)
 }
 
 #' @export
@@ -171,19 +164,27 @@ formatQueryResults <- function(results) {
     all.times <- double(N)
     all.users <- character(N)
     all.meta <- vector("list", N)
+    has.metadata <- FALSE
 
     for (i in seq_along(results)) {
         y <- results[[i]]
         all.paths[i] <- y$path
         all.times[i] <- y$time
         all.users[i] <- y$user
-        all.meta[[i]] <- y$metadata
+        if (!is.null(y$metadata)) {
+            all.meta[[i]] <- y$metadata
+            has.metadata <- TRUE
+        }
     }
 
-    data.frame(
+    output <- data.frame(
         path=all.paths,
         user=all.users,
-        time=as.POSIXct(all.times),
-        metadata=I(all.meta)
-    )
+        time=as.POSIXct(all.times)
+    )        
+    if (has.metadata) {
+        output$metadata <- I(all.meta)
+    }
+
+    output
 }

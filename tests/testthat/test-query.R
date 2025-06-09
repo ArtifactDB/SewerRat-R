@@ -10,9 +10,13 @@ on.exit(deregister(mydir, url=info$url), add=TRUE, after=FALSE)
 test_that("basic queries work", {
     q <- query("aaron", url=info$url)
     expect_identical(length(q), 1L)
+    expect_true("metadata" %in% names(q[[1]]))
 
     q <- query("lun*", url=info$url)
     expect_identical(length(q), 2L)
+
+    q <- query("lun*", url=info$url, metadata=FALSE)
+    expect_false("metadata" %in% names(q[[1]]))
 
     expect_message(q <- query("lun*", url=info$url, number=Inf), NA) # no warnings when number=Inf.
     expect_identical(length(q), 2L)
@@ -37,6 +41,11 @@ test_that("formatting of query results works properly", {
     expect_identical(nrow(res), length(q))
     expect_equal(as.double(res$time), vapply(q, function(y) y$time, 0))
     expect_identical(res$metadata[[1]], q[[1]]$metadata)
+
+    # Works without metadata.
+    q <- query("lun*", url=info$url, metadata=FALSE)
+    res <- formatQueryResults(q)
+    expect_false("metadata" %in% colnames(res))
 })
 
 })()

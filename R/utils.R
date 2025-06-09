@@ -81,3 +81,19 @@ download_file <- function(url, path) {
         Sys.setFileTime(path, mod)
     }
 }
+
+#' @importFrom utils head
+handle_truncated_pages <- function(on.truncation, original.number, collected) {
+    if (on.truncation != "none") {
+        if (!is.infinite(original.number) && original.number < length(collected)) {
+            msg <- sprintf("truncated results to the first %i entries", original.number)
+            if (on.truncation == "warning") {
+                warning(msg)
+            } else {
+                message(msg)
+            }
+            collected <- head(collected, original.number)
+        }
+    }
+    collected
+}

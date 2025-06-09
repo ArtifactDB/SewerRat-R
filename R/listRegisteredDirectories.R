@@ -2,7 +2,7 @@
 #'
 #' List the directories that were registered in SewerRat.
 #'
-#' @param url String containing the URL of the SewerRat REST API.
+#' @inheritParams query
 #' @param user String containing the name of a user.
 #' If not \code{NULL}, results are filtered to directories registered by this user.
 #' If \code{TRUE}, this is set to the current user.
@@ -47,7 +47,7 @@
 #' 
 #' @export
 #' @import httr2
-listRegisteredDirectories <- function(url, user=NULL, contains=NULL, prefix=NULL, within=NULL, exists=NULL) {
+listRegisteredDirectories <- function(url, user=NULL, contains=NULL, prefix=NULL, within=NULL, exists=NULL, number=100, on.truncation=c("message", "warning", "none")) {
     query <- character(0)
     if (!is.null(user) && !isFALSE(user)) {
         if (isTRUE(user)) {
@@ -68,14 +68,39 @@ listRegisteredDirectories <- function(url, user=NULL, contains=NULL, prefix=NULL
         query <- c(query, paste0("exists=", tolower(exists)))
     }
 
-    url <- paste0(url, "/registered")
-    if (length(query)) {
-        url <- paste0(url, "?", paste(query, collapse="&"))
+    on.truncation <- match.arg(on.truncation)
+    original.number <- number
+    if (on.truncation != "none") {
+        number <- number + 1L
     }
 
-    req <- request(url)
-    req <- handle_error(req)
-    res <- req_perform(req)
-    resp_body_json(res)
-}
+    stub <- "/registered"
+    use.question <- TRUE
+    if (length(query)) {
+        stub <- paste0(stub, "?", paste(query, collapse="&"))
+        use.question <- FALSE
+    }
 
+    collected <- list()
+    while (length(collected) < number) {
+        current.url <- paste0(url, stub)
+        if (!is.infinite(number)) {
+            sep <- if (use.question) "?" else "&"
+            current.url <- paste0(current.url, sep, "limit=", number - length(collected))
+        }
+
+        req <- request(current.url)
+        req <- handle_error(req)
+        res <- req_perform(req)
+        payload <- resp_body_json(res)
+        collected <- c(collected, payload$results)
+
+        stub <- payload$`next`
+        if (is.null(stub)) {
+            break
+        }
+        use.question <- FALSE
+    }
+
+    handle_truncated_pages(on.truncation, original.number, collected)
+}

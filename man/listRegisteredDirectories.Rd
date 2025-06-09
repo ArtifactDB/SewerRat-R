@@ -10,11 +10,13 @@ listRegisteredDirectories(
   contains = NULL,
   prefix = NULL,
   within = NULL,
-  exists = NULL
+  exists = NULL,
+  number = 100,
+  on.truncation = c("message", "warning", "none")
 )
 }
 \arguments{
-\item{url}{String containing the URL of the SewerRat REST API.}
+\item{url}{String containing the URL to the SewerRat REST API.}
 
 \item{user}{String containing the name of a user.
 If not \code{NULL}, results are filtered to directories registered by this user.
@@ -32,6 +34,12 @@ If not \code{NULL}, results are filtered to directories that are equal to or lie
 
 \item{exists}{Logical scalar indicating whether to only report directories that exist on the filesystem.
 If \code{FALSE}, only non-existent directories are reported, and if \code{NULL}, no filtering is applied based on existence.}
+
+\item{number}{Integer specifying the maximum number of results to return.
+This can also be \code{Inf} to return all results.}
+
+\item{on.truncation}{String specifying what to do when the number of results exceeds \code{number}.
+Either \code{"warning"}, \code{"message"}, or \code{"none"}.}
 }
 \value{
 List of named lists, where each inner list corresponds to a registered directory and contains:
