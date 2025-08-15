@@ -7,6 +7,8 @@
 #' @param port Integer specifying the port to use for hosting the service.
 #' If \code{NULL}, a free port is randomly selected.
 #' @param wait Integer specifying the number of seconds to wait for service initialization.
+#' @param whitelist Character vector of users who are allowed to create symbolic links.
+#' If \code{NULL}, it defaults to the current user and all owners of \code{\link{tempdir}}.
 #' @param overwrite Logical scalar indicating whether to redownload the Gobbler binary.
 #' @param version String containing the desired version of the Gobbler binary.
 #'
@@ -25,7 +27,7 @@
 #' startSewerRat() # initialize a new instance.
 #' 
 #' @export
-startSewerRat <- function(db=tempfile(fileext=".sqlite3"), port=NULL, wait = 1, version = "1.2.0", overwrite = FALSE) {
+startSewerRat <- function(db=tempfile(fileext=".sqlite3"), port=NULL, wait = 1, version = "1.3.1", whitelist = NULL, overwrite = FALSE) {
     if (!is.null(running$active)) {
         return(list(new=FALSE, port=running$port, url=assemble_url(running$port)))
     }
@@ -73,9 +75,12 @@ startSewerRat <- function(db=tempfile(fileext=".sqlite3"), port=NULL, wait = 1, 
     if (is.null(port)) {
         port <- choose_port()
     }
+    if (is.null(whitelist)) {
+        whitelist <- choose_whitelist()
+    }
 
     script <- system.file("scripts", "deploy.sh", package="SewerRat", mustWork=TRUE)
-    pid <- system2(script, c(shQuote(exe), shQuote(db), shQuote(port)), stdout=TRUE) 
+    pid <- system2(script, c(shQuote(exe), shQuote(db), shQuote(port), shQuote(paste(whitelist, collapse=","))), stdout=TRUE) 
     Sys.sleep(wait)
 
     process <- new.env()
@@ -101,6 +106,20 @@ choose_port <- function() {
             return(port)
         }
     }
+}
+
+choose_whitelist <- function() {
+    whitelist <- Sys.info()[["user"]]
+    tmp <- tempdir()
+    repeat {
+        whitelist <- union(whitelist, file.info(tmp)[["uname"]])
+        parent <- dirname(tmp)
+        if (parent == tmp) {
+            break
+        }
+        tmp <- parent
+    }
+    whitelist
 }
 
 assemble_url <- function(port) { 

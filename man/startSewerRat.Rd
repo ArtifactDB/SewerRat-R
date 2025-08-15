@@ -9,7 +9,8 @@ startSewerRat(
   db = tempfile(fileext = ".sqlite3"),
   port = NULL,
   wait = 1,
-  version = "1.2.0",
+  version = "1.3.1",
+  whitelist = NULL,
   overwrite = FALSE
 )
 
@@ -24,6 +25,9 @@ If \code{NULL}, a free port is randomly selected.}
 \item{wait}{Integer specifying the number of seconds to wait for service initialization.}
 
 \item{version}{String containing the desired version of the Gobbler binary.}
+
+\item{whitelist}{Character vector of users who are allowed to create symbolic links.
+If \code{NULL}, it defaults to the current user and all owners of \code{\link{tempdir}}.}
 
 \item{overwrite}{Logical scalar indicating whether to redownload the Gobbler binary.}
 }
