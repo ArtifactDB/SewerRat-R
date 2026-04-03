@@ -6,7 +6,7 @@ extract_error_message <- function(res) {
     } else if (ct == "text/plain") {
         resp_body_string(res)
     } else {
-        NULL
+        character(0)
     }
 }
 
